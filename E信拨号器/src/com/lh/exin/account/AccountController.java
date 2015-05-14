@@ -1,6 +1,6 @@
-package com.lh.exin;
+package com.lh.exin.account;
 
-import com.lh.exin.CXKUsername;
+import com.lh.exin.account.*;
 
 /**
  * Created by 陈耀璇 on 2015/5/6.

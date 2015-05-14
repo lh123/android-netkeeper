@@ -6,6 +6,7 @@ import android.telephony.*;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
+import com.lh.exin.account.*;
 import java.io.*;
 import org.json.*;
 
@@ -49,7 +50,7 @@ public class MainActivity extends Activity
 						login = new AccountLogin(exRelAccount, exPassword, handler);
 						login.setRoutInfo(rAccount, rPassword, rIp);
 						//login.login();
-						login.getWanHtml();
+						login.getWanHtml(MessageStatus.WANT_LOGIN);
 						checkIsSaved();
 						}
 					}
@@ -70,7 +71,8 @@ public class MainActivity extends Activity
 							login = new AccountLogin(exRelAccount, exPassword, handler);
 							login.setRoutInfo(rAccount, rPassword, rIp);
 						}
-						login.getWanInfo();
+						login.getWanHtml(MessageStatus.WANT_GET_WANINFO);
+						//login.getWanInfo();
 					}
 			});
     }
@@ -91,7 +93,7 @@ public class MainActivity extends Activity
 					break;
 				case MessageStatus.LOGIN_FAIL:
 					tvStatus.setText("连接失败");
-					login.login();
+					//login.login();
 					break;
 				case MessageStatus.GET_WIFI_INFO_SUCCESS:
 					showWanInfo((String[])msg.obj);
@@ -102,6 +104,18 @@ public class MainActivity extends Activity
 					break;
 				case MessageStatus.GET_WAN_HTML_SUCCESS:
 					login.checkLoginStatus((String)msg.obj);
+					break;
+				case MessageStatus.WANT_GET_WANINFO:
+					login.getWanInfo();
+					break;
+				case MessageStatus.WANT_LOGIN:
+					//login.login();
+					login.checkLoginStatus((String)msg.obj);
+					break;
+				case MessageStatus.NEED_LOGIN:
+					login.login();
+					break;
+				case MessageStatus.WANT_GET_HTML:
 					break;
 				default:
 					tvStatus.setText("未知错误");
@@ -190,14 +204,14 @@ public class MainActivity extends Activity
 	{
 		StringBuffer temp=new StringBuffer();
 		temp.append("WAN口连接信息\n---------------------\n");
-		temp.append("外网连接状态 ： " + (backInfo[14].equals("1") ? "已经连接" : "未连接") + "\n");
-		temp.append("MAC 地址 ; " + backInfo[1] + "\n");
-		temp.append("IP 地址 : " + backInfo[2] + "\n");
-		temp.append("子网掩码 ： " + backInfo[4] + "\n");
-		temp.append("网关地址 ： " + backInfo[7] + "\n");
-		temp.append("主DNS服务器 ： " + backInfo[11] + "\n"); 
-		temp.append("次DNS服务器 : " + backInfo[12] + "\n");
-		temp.append("在线时间 ： " + backInfo[13] + "\n");
+		temp.append("外网连接状态： " + (backInfo[14].equals("1") ? "已经连接" : "未连接") + "\n");
+		temp.append("MAC地址: " + backInfo[1] + "\n");
+		temp.append("IP地址: " + backInfo[2] + "\n");
+		temp.append("子网掩码： " + backInfo[4] + "\n");
+		temp.append("网关地址： " + backInfo[7] + "\n");
+		temp.append("主DNS服务器： " + backInfo[11] + "\n"); 
+		temp.append("次DNS服务器: " + backInfo[12] + "\n");
+		temp.append("在线时间： " + backInfo[13] + "\n");
 		temp.append("---------------------");
 		new AlertDialog.Builder(this).setTitle("Wan信息").setMessage(temp.toString()).setPositiveButton("确定", null).show();
 	}

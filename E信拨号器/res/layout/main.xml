@@ -73,25 +73,33 @@
 				android:inputType="textPassword"
 				android:hint="路由器密码"/>
 
-			<TextView
-				android:layout_width="270dp"
+			<LinearLayout
 				android:layout_height="wrap_content"
-				android:id="@+id/tv_status"
-				android:layout_gravity="center"
-				android:text="连接状态"
-				android:textSize="16dp"
-				android:paddingTop="5dp"
-				android:paddingBottom="5dp"
-				android:textColor="#0099cc"/>
+				android:layout_width="match_parent"
+				android:orientation="horizontal">
 
-			<CheckBox
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="保存"
-				android:textColor="#000000"
-				android:id="@+id/cb_save"
-				android:layout_marginRight="5dp"
-				android:checked="true"/>
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:id="@+id/tv_status"
+					android:text="连接状态"
+					android:textSize="16dp"
+					android:paddingTop="5dp"
+					android:paddingBottom="5dp"
+					android:textColor="#0099cc"
+					android:layout_weight="1.0"/>
+
+				<CheckBox
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="保存信息"
+					android:textColor="#0099cc"
+					android:id="@+id/cb_save"
+					android:layout_marginRight="5dp"
+					android:checked="true"
+					android:layout_weight="1.0"/>
+
+			</LinearLayout>
 
 			<LinearLayout
 				android:layout_width="match_parent"
@@ -110,9 +118,9 @@
 					android:textColor="#FFFFFF"
 					android:layout_gravity="center"
 					android:text="连接"
-					android:background="#0099CC"
 					android:layout_weight="1.0"
-					android:layout_marginRight="5dp"/>
+					android:layout_marginRight="5dp"
+					android:background="@drawable/button"/>
 
 				<Button
 					android:layout_width="match_parent"
@@ -123,9 +131,25 @@
 					android:textColor="#FFFFFF"
 					android:layout_gravity="center"
 					android:text="wan状态"
-					android:background="#0099CC"
 					android:layout_weight="1.0"
-					android:layout_marginLeft="5dp"/>
+					android:layout_marginLeft="5dp"
+					android:background="@drawable/button"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:layout_width="match_parent"
+				android:orientation="horizontal"
+				android:gravity="center">
+
+				<Button
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"
+					android:text="高级功能"
+					android:background="@drawable/button"
+					android:textColor="#FFFFFF"
+					android:id="@+id/but_advance"/>
 
 			</LinearLayout>
 

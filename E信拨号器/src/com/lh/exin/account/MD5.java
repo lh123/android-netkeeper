@@ -1,4 +1,4 @@
-package com.lh.exin;
+package com.lh.exin.account;
 
 /**
  * MD5的算法在RFC1321 中定义

@@ -1,8 +1,8 @@
-package com.lh.exin;
+package com.lh.exin.account;
 
+import com.lh.exin.*;
 import java.io.*;
 import java.net.*;
-import java.util.logging.*;
 
 public class AccountLogin
 {
@@ -107,14 +107,14 @@ public class AccountLogin
 							}
 							else
 							{
-								handle.sendEmptyMessage(MessageStatus.LOGIN_FAIL);
+								handle.sendEmptyMessage(MessageStatus.NEED_LOGIN);
 							}
 						}
 					}
 				}
 			}).start();
 	}
-	public void getWanHtml()
+	public void getWanHtml(final int want)
 	{
 		new Thread(new Runnable(){
 
@@ -137,7 +137,7 @@ public class AccountLogin
 							temp.append(HTML);
 						}
 						HTML = temp.toString();
-						handle.sendMessage(handle.obtainMessage(MessageStatus.GET_WAN_HTML_SUCCESS,HTML));
+						handle.sendMessage(handle.obtainMessage(want,HTML));
 					}
 					catch (IOException e)
 					{
@@ -148,7 +148,7 @@ public class AccountLogin
 	}
 	public void getWanInfo()
 	{
-		getWanHtml();
+		getWanHtml(MessageStatus.WANT_GET_HTML);
 		new Thread(new Runnable(){
 
 				@Override
@@ -165,6 +165,7 @@ public class AccountLogin
 							{
 								String[] wanInfo;
 								String tArray=HTML.substring(tIndex, tEnd);
+								tArray=tArray.replace("\"","");
 								wanInfo = tArray.split(",");
 								handle.sendMessage(handle.obtainMessage(MessageStatus.GET_WIFI_INFO_SUCCESS, wanInfo));
 							}
