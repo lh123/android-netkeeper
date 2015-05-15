@@ -13,6 +13,7 @@ import com.lh.exin.routdata.*;
 import java.io.*;
 import org.json.*;
 import com.lh.exin.routinfospace.*;
+import com.lh.exin.authority.*;
 
 public class MainActivity extends Activity
 {
@@ -23,6 +24,7 @@ public class MainActivity extends Activity
 	private RoutControl routControl; 
 	private UpdateControl updateControl;
 	private RoutInfoSpace routInfo;
+	private CheckAuthority auth;
     @Override
     public void onCreate(Bundle savedInstanceState)
 	{
@@ -43,7 +45,7 @@ public class MainActivity extends Activity
 		updateControl=new UpdateControl(this);
 		routControl=new RoutControl(this,edExAccount, edExPassword, edRoutAccount, edRoutPassword, edRoutIp, tvStatus);
 		routInfo=new RoutInfoSpace(cbSave, edExAccount, edExPassword, edRoutAccount, edRoutPassword, edRoutIp, this);
-		updateControl.startUpdate();
+		auth=new CheckAuthority(this);
 		routInfo.readInfo();
 		btnUpdate.setOnClickListener(new OnClickListener(){
 
@@ -63,20 +65,17 @@ public class MainActivity extends Activity
 					Intent i=new Intent();
 					i.setClass(MainActivity.this,AdvanceFunctionActivity.class);
 					startActivity(i);
-				}
+					}
 			});
 		btnSet.setOnClickListener(new OnClickListener(){
 
 				@Override
 				public void onClick(View p1)
 				{
-					if (checkIMEI()==true)
+					if (auth.checkAuthStatus())
 					{
 						routControl.login();
-					}
-					else
-					{
-						new AlertDialog.Builder(MainActivity.this).setTitle("警告").setMessage("该设备未被授权运行").setPositiveButton("确定",null).show();
+						updateControl.startUpdate();
 					}
 					routInfo.saveInfo();
 				}
@@ -86,24 +85,11 @@ public class MainActivity extends Activity
 				@Override
 				public void onClick(View p1)
 				{
-					routControl.getWanInfo();
+					if(auth.checkAuthStatus())
+					{
+						routControl.getWanInfo();
+					}
 				}
 			});
     }
-
-	public boolean checkIMEI()
-	{
-		boolean canRun=false;
-		String imei = ((TelephonyManager) getSystemService(TELEPHONY_SERVICE)).getDeviceId();
-		System.out.println(imei);
-		for (int i=0;i < IMEI.imei.length;i++)
-		{
-			if (imei.equals(IMEI.imei[i]))
-			{
-				canRun = true;
-				break;
-			}
-		}
-		return canRun;
-	}
 }

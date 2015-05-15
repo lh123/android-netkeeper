@@ -22,4 +22,7 @@ public class MessageStatus
 	public static final int DOWN_FAILED=16;
 	public static final int CHECK_UPDATE_SUCCESS=17;
 	public static final int CHECK_UPDATE_FAILED=18;
+	public static final int AUTH_PASS=19;
+	public static final int AUTH_FAILED=20;
+	public static final int AUTH_CONNECT_FAILED=21;
 }
