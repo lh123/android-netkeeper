@@ -6,6 +6,7 @@ import java.net.*;
 import javax.net.ssl.*;
 import com.lh.exin.message.*;
 import android.app.*;
+import java.util.*;
 
 public class CheckAuthority
 {
@@ -85,9 +86,11 @@ public class CheckAuthority
 	
 	public void setAuthStatusPass()
 	{
+		
 		SharedPreferences sp=context.getSharedPreferences("auth_status",0);
 		SharedPreferences.Editor editor=sp.edit();
 		editor.putBoolean("auth_status",true);
+		
 		editor.commit();
 	}
 	public void setAuthStatusFail()
@@ -97,19 +100,7 @@ public class CheckAuthority
 		editor.putBoolean("auth_status",false);
 		editor.commit();
 	}
-	public boolean checkAuthNoMessage()
-	{
-		SharedPreferences sp=context.getSharedPreferences("auth_status",0);
-		if(sp.getBoolean("auth_status",false))
-		{
-			return true;
-		}
-		else
-		{
-			hander.sendEmptyMessage(MessageStatus.AUTH_FAILED);
-			return false;
-		}
-	}
+	
 	public boolean checkAuthStatus()
 	{
 		SharedPreferences sp=context.getSharedPreferences("auth_status",0);

@@ -34,9 +34,9 @@ public class DownLoadHandler extends Handler
 			case MessageStatus.DOWN_SUCCESS:
 				down.installApk((File)msg.obj);
 				break;
-			case MessageStatus.DOWN_FAILED:
-				Toast.makeText(context,"下载失败",Toast.LENGTH_SHORT).show();
-				break;
+//			case MessageStatus.DOWN_FAILED:
+//				Toast.makeText(context,"下载失败",Toast.LENGTH_SHORT).show();
+//				break;
 			case MessageStatus.CHECK_UPDATE_SUCCESS:
 				updateCheck.checkNeedUpdate();
 				break;

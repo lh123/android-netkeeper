@@ -9,6 +9,7 @@ public class RoutControl
 {
 	private EditText edExAccount,edExPassword,edRoutAccount,edRoutPassword,edRoutIp;
 	private MessageHandler handler;
+	private TrackHandler thandler;
 	private AccountLogin login;
 	private TextView tvStatus;
 	private Context context;
@@ -28,23 +29,26 @@ public class RoutControl
 	{
 		readEdittext();
 		handler = new MessageHandler(context, tvStatus);
+		thandler = new TrackHandler(context, tvStatus);
 		login = new AccountLogin(RoutData.exRelAccount, RoutData.exPassword);
 		login.setRoutInfo(RoutData.rAccount, RoutData.rPassword, RoutData.rIp);
-		login.setHandler(handler);
+		login.setHandler(handler, thandler);
 		handler.setLogin(login);
 	}
 	public void login()
 	{
-		if (MessageStatus.isLogin == false)
+		setRoutControl();
+		login.startTrack();
+		if (MessageStatus.isLogin)
 		{
-			setRoutControl();
-			login.getWanHtml(MessageStatus.WANT_LOGIN);
+			login.login();
+			login.startTrack();
 		}
 	}
 	public void getWanInfo()
-	{
+	{		
 		setRoutControl();
-		login.getWanHtml(MessageStatus.WANT_GET_WANINFO);
+		login.getWanInfo();
 	}
 
 	public void readEdittext()

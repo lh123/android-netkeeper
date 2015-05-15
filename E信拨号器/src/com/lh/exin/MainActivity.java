@@ -75,7 +75,7 @@ public class MainActivity extends Activity
 					if (auth.checkAuthStatus())
 					{
 						routControl.login();
-						updateControl.startUpdate();
+						//updateControl.startUpdate();
 					}
 					routInfo.saveInfo();
 				}

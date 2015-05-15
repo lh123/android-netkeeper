@@ -25,44 +25,8 @@ public class MessageHandler extends Handler
 	{
 		switch (msg.what)
 		{
-			case MessageStatus.LOGIN_ING:
-				tvStatus.setText("登陆中");
-				break;
-			case MessageStatus.LOGIN_SUCCESS:
-				tvStatus.setText("已连接");
-				MessageStatus.isLogin=true;
-				break;
-			case MessageStatus.LOGIN_FAIL:
-				tvStatus.setText("连接失败");
-				//login.login();
-				break;
 			case MessageStatus.GET_WIFI_INFO_SUCCESS:
 				showWanInfo((String[])msg.obj);
-				break;
-			case MessageStatus.WAN_SUCCESS:
-				tvStatus.setText("已连接");
-				MessageStatus.isLogin=true;
-				break;
-			case MessageStatus.GET_WAN_HTML_SUCCESS:
-				login.checkLoginStatus((String)msg.obj);
-				break;
-			case MessageStatus.WANT_GET_WANINFO:
-				login.getWanInfo();
-				break;
-			case MessageStatus.WANT_LOGIN:
-				//login.login();
-				login.checkLoginStatus((String)msg.obj);
-				break;
-			case MessageStatus.NEED_LOGIN:
-				login.login();
-				break;
-			case MessageStatus.WANT_GET_HTML:
-				break;
-			case MessageStatus.CONNECT_TIMEOUT:
-				tvStatus.setText("连接超时");
-				break;
-			case MessageStatus.CONNECT_FAIL:
-				tvStatus.setText("无法连接到路由器");
 				break;
 			default:
 				tvStatus.setText("未知错误");
