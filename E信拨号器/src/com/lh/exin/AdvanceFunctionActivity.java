@@ -33,17 +33,17 @@ public class AdvanceFunctionActivity extends Activity
 				{
 					readTime();
 					//login = new AccountLogin(RoutInfo.exRelAccount, RoutInfo.exPassword, handler);
-					login.setRoutInfo(RoutInfo.rAccount, RoutInfo.rPassword, RoutInfo.rIp);
-					login.setLoginTime(RoutInfo.startHour,RoutInfo.startMin,RoutInfo.endHour,RoutInfo.endMin);
+					login.setRoutInfo(RoutData.rAccount, RoutData.rPassword, RoutData.rIp);
+					login.setLoginTime(RoutData.startHour,RoutData.startMin,RoutData.endHour,RoutData.endMin);
 					//login.loginAtTime();
 				}
 			});
 	}
 	public void readTime()
 	{
-		RoutInfo.startHour=edStartHour.getText().toString();
-		RoutInfo.startMin=edStrartMin.getText().toString();
-		RoutInfo.endHour=edEndHour.getText().toString();
-		RoutInfo.endMin=edEndMin.getText().toString();
+		RoutData.startHour=edStartHour.getText().toString();
+		RoutData.startMin=edStrartMin.getText().toString();
+		RoutData.endHour=edEndHour.getText().toString();
+		RoutData.endMin=edEndMin.getText().toString();
 	}
 }

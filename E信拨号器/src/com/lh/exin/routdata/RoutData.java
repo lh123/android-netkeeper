@@ -1,6 +1,6 @@
 package com.lh.exin.routdata;
 
-public class RoutInfo
+public class RoutData
 {
 	public static String rAccount;
 	public static String rPassword;

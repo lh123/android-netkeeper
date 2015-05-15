@@ -28,8 +28,8 @@ public class RoutControl
 	{
 		readEdittext();
 		handler = new MessageHandler(context, tvStatus);
-		login = new AccountLogin(RoutInfo.exRelAccount, RoutInfo.exPassword);
-		login.setRoutInfo(RoutInfo.rAccount, RoutInfo.rPassword, RoutInfo.rIp);
+		login = new AccountLogin(RoutData.exRelAccount, RoutData.exPassword);
+		login.setRoutInfo(RoutData.rAccount, RoutData.rPassword, RoutData.rIp);
 		login.setHandler(handler);
 		handler.setLogin(login);
 	}
@@ -49,11 +49,11 @@ public class RoutControl
 
 	public void readEdittext()
 	{
-		RoutInfo.exAccount = edExAccount.getText().toString();
-		RoutInfo.exRelAccount = AccountController.getRealAccount(RoutInfo.exAccount);
-		RoutInfo.exPassword = edExPassword.getText().toString();
-		RoutInfo.rAccount = edRoutAccount.getText().toString();
-		RoutInfo.rIp = edRoutIp.getText().toString();
-		RoutInfo.rPassword = edRoutPassword.getText().toString();
+		RoutData.exAccount = edExAccount.getText().toString();
+		RoutData.exRelAccount = AccountController.getRealAccount(RoutData.exAccount);
+		RoutData.exPassword = edExPassword.getText().toString();
+		RoutData.rAccount = edRoutAccount.getText().toString();
+		RoutData.rIp = edRoutIp.getText().toString();
+		RoutData.rPassword = edRoutPassword.getText().toString();
 	}
 }

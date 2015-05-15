@@ -50,7 +50,7 @@ public class UpdateCheck
 				{
 					try
 					{
-						URL url=new URL("https://raw.githubusercontent.com/lh123/update-service/master/update.xml");
+						URL url=new URL("https://git.oschina.net/lh123/update-service/raw/master/update.xml");
 						HttpURLConnection connect=(HttpURLConnection) url.openConnection();
 						connect.setConnectTimeout(3000);
 						DocumentBuilder db=DocumentBuilderFactory.newInstance().newDocumentBuilder();

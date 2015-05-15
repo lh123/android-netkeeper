@@ -12,6 +12,7 @@ import com.lh.exin.message.*;
 import com.lh.exin.routdata.*;
 import java.io.*;
 import org.json.*;
+import com.lh.exin.routinfospace.*;
 
 public class MainActivity extends Activity
 {
@@ -21,7 +22,7 @@ public class MainActivity extends Activity
 	private CheckBox cbSave;
 	private RoutControl routControl; 
 	private UpdateControl updateControl;
-	private MessageHandler handler;
+	private RoutInfoSpace routInfo;
     @Override
     public void onCreate(Bundle savedInstanceState)
 	{
@@ -39,11 +40,11 @@ public class MainActivity extends Activity
 		btnUpdate=(Button) findViewById(R.id.btn_update);
 		tvStatus = (TextView) findViewById(R.id.tv_status);
 		cbSave = (CheckBox) findViewById(R.id.cb_save);
-		handler=new MessageHandler(this,tvStatus);
 		updateControl=new UpdateControl(this);
 		routControl=new RoutControl(this,edExAccount, edExPassword, edRoutAccount, edRoutPassword, edRoutIp, tvStatus);
+		routInfo=new RoutInfoSpace(cbSave, edExAccount, edExPassword, edRoutAccount, edRoutPassword, edRoutIp, this);
 		updateControl.startUpdate();
-		readSavedInfo();
+		routInfo.readInfo();
 		btnUpdate.setOnClickListener(new OnClickListener(){
 
 				@Override
@@ -77,6 +78,7 @@ public class MainActivity extends Activity
 					{
 						new AlertDialog.Builder(MainActivity.this).setTitle("警告").setMessage("该设备未被授权运行").setPositiveButton("确定",null).show();
 					}
+					routInfo.saveInfo();
 				}
 			});
 		btnInfo.setOnClickListener(new OnClickListener(){
@@ -88,74 +90,6 @@ public class MainActivity extends Activity
 				}
 			});
     }
-	public void checkIsSaved()
-	{
-		File file =new File("/mnt/sdcard/EXinData.txt");
-		if (cbSave.isChecked())
-		{
-			JSONObject js=new JSONObject();
-			String jsString = null;
-			try
-			{
-				js.put("exaccount", RoutInfo.exAccount);
-				js.put("expassword", RoutInfo.exPassword);
-				js.put("routip", RoutInfo.rIp);
-				js.put("routaccount", RoutInfo.rAccount);
-				js.put("routpassword", RoutInfo.rPassword);
-				jsString = js.toString();
-			}
-			catch (JSONException e)
-			{}
-			try
-			{
-				FileWriter fw=new FileWriter(file);
-				fw.write(jsString);
-				fw.close();
-			}
-			catch (IOException e)
-			{}
-		}
-		else
-		{
-			if (file.exists())
-			{
-				file.delete();
-			}
-		}
-	}
-	public void readSavedInfo()
-	{
-		File file=new File("/mnt/sdcard/EXinData.txt");
-		if (file.exists())
-		{
-			StringBuffer jsString=new StringBuffer();
-			String temp=null;
-			try
-			{
-				FileInputStream fi=new FileInputStream(file);
-				InputStreamReader ir=new InputStreamReader(fi);
-				BufferedReader br=new BufferedReader(ir);
-				while ((temp = br.readLine()) != null)
-				{
-					jsString.append(temp);
-				}
-			}
-			catch (IOException e)
-			{}
-			try
-			{
-				JSONObject jsobj=new JSONObject(jsString.toString());
-				edExAccount.setText((String)jsobj.get("exaccount"));
-				edExPassword.setText((String)jsobj.get("expassword"));
-				edRoutAccount.setText((String)jsobj.get("routaccount"));
-				edRoutIp.setText((String)jsobj.get("routip"));
-				edRoutPassword.setText((String)jsobj.get("routpassword"));
-			}
-			catch (JSONException e)
-			{}
-		}
-	}
-	
 
 	public boolean checkIMEI()
 	{
