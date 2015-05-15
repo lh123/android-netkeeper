@@ -32,10 +32,10 @@ public class AdvanceFunctionActivity extends Activity
 				public void onClick(View p1)
 				{
 					readTime();
-					login = new AccountLogin(RoutInfo.exRelAccount, RoutInfo.exPassword, handler);
+					//login = new AccountLogin(RoutInfo.exRelAccount, RoutInfo.exPassword, handler);
 					login.setRoutInfo(RoutInfo.rAccount, RoutInfo.rPassword, RoutInfo.rIp);
 					login.setLoginTime(RoutInfo.startHour,RoutInfo.startMin,RoutInfo.endHour,RoutInfo.endMin);
-					login.loginAtTime();
+					//login.loginAtTime();
 				}
 			});
 	}

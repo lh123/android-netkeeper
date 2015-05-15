@@ -11,11 +11,14 @@ public class MessageHandler extends Handler
 	private TextView tvStatus;
 	private AccountLogin login;
 
-	public MessageHandler(Context context, TextView tvStatus, AccountLogin login)
+	public MessageHandler(Context context, TextView tvStatus)
 	{
 		this.context = context;
 		this.tvStatus = tvStatus;
-		this.login = login;
+	}
+	public void setLogin(AccountLogin login)
+	{
+		this.login=login;
 	}
 	@Override
 	public void handleMessage(Message msg)

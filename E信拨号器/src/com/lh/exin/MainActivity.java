@@ -7,12 +7,11 @@ import android.telephony.*;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
-import com.lh.exin.account.*;
+import com.lh.exin.control.*;
 import com.lh.exin.message.*;
 import com.lh.exin.routdata.*;
 import java.io.*;
 import org.json.*;
-import com.lh.exin.update.*;
 
 public class MainActivity extends Activity
 {
@@ -20,10 +19,9 @@ public class MainActivity extends Activity
 	private Button btnSet,btnInfo,btnAdvance,btnUpdate;
 	private TextView tvStatus;
 	private CheckBox cbSave;
-	private MessageHandler handler;
-	private AccountLogin login;
+	private RoutControl routControl; 
 	private UpdateControl updateControl;
-	//private String exAccount,exRelAccount,exPassword,rAccount,rPassword,rIp;
+	private MessageHandler handler;
     @Override
     public void onCreate(Bundle savedInstanceState)
 	{
@@ -41,17 +39,16 @@ public class MainActivity extends Activity
 		btnUpdate=(Button) findViewById(R.id.btn_update);
 		tvStatus = (TextView) findViewById(R.id.tv_status);
 		cbSave = (CheckBox) findViewById(R.id.cb_save);
-		
-		handler = new MessageHandler(this,tvStatus,login);
+		handler=new MessageHandler(this,tvStatus);
 		updateControl=new UpdateControl(this);
+		routControl=new RoutControl(this,edExAccount, edExPassword, edRoutAccount, edRoutPassword, edRoutIp, tvStatus);
+		updateControl.startUpdate();
 		readSavedInfo();
-		//checkIMEI();
 		btnUpdate.setOnClickListener(new OnClickListener(){
 
 				@Override
 				public void onClick(View p1)
 				{
-					updateControl.setUpdateInfo();
 					updateControl.startUpdate();
 				}
 			});
@@ -61,7 +58,7 @@ public class MainActivity extends Activity
 				@Override
 				public void onClick(View p1)
 				{
-					readEdittext();
+					routControl.readEdittext();
 					Intent i=new Intent();
 					i.setClass(MainActivity.this,AdvanceFunctionActivity.class);
 					startActivity(i);
@@ -74,15 +71,7 @@ public class MainActivity extends Activity
 				{
 					if (checkIMEI()==true)
 					{
-						if(MessageStatus.isLogin==false)
-						{
-						readEdittext();
-						login = new AccountLogin(RoutInfo.exRelAccount, RoutInfo.exPassword, handler);
-						login.setRoutInfo(RoutInfo.rAccount, RoutInfo.rPassword, RoutInfo.rIp);
-						//login.login();
-						login.getWanHtml(MessageStatus.WANT_LOGIN);
-						checkIsSaved();
-						}
+						routControl.login();
 					}
 					else
 					{
@@ -95,15 +84,8 @@ public class MainActivity extends Activity
 				@Override
 				public void onClick(View p1)
 				{
-						if(login==null)
-						{
-							readEdittext();
-							login = new AccountLogin(RoutInfo.exRelAccount, RoutInfo.exPassword, handler);
-							login.setRoutInfo(RoutInfo.rAccount, RoutInfo.rPassword, RoutInfo.rIp);
-						}
-						login.getWanHtml(MessageStatus.WANT_GET_WANINFO);
-						//login.getWanInfo();
-					}
+					routControl.getWanInfo();
+				}
 			});
     }
 	public void checkIsSaved()
@@ -173,15 +155,7 @@ public class MainActivity extends Activity
 			{}
 		}
 	}
-	public void readEdittext()
-	{
-		RoutInfo.exAccount = edExAccount.getText().toString();
-		RoutInfo.exRelAccount = AccountController.getRealAccount(RoutInfo.exAccount);
-		RoutInfo.exPassword = edExPassword.getText().toString();
-		RoutInfo.rAccount = edRoutAccount.getText().toString();
-		RoutInfo.rIp = edRoutIp.getText().toString();
-		RoutInfo.rPassword = edRoutPassword.getText().toString();
-	}
+	
 
 	public boolean checkIMEI()
 	{

@@ -16,7 +16,10 @@ public class MessageStatus
 	public static final int CONNECT_TIMEOUT=10;
 	public static final int CONNECT_FAIL=11;
 	public static final int NEED_UPDATE=12;
-	public static final int CONFIRM_UPDATE=13;
-	public static final int DOWN_SUCCESS=14;
-	public static final int DOWN_FAILED=15;
+	public static final int DONT_NEED_UPDATE=13;
+	public static final int CONFIRM_UPDATE=14;
+	public static final int DOWN_SUCCESS=15;
+	public static final int DOWN_FAILED=16;
+	public static final int CHECK_UPDATE_SUCCESS=17;
+	public static final int CHECK_UPDATE_FAILED=18;
 }

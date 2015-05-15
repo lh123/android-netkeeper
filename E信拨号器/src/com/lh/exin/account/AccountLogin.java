@@ -1,6 +1,5 @@
 package com.lh.exin.account;
 
-import com.lh.exin.*;
 import com.lh.exin.message.*;
 import java.io.*;
 import java.net.*;
@@ -9,23 +8,14 @@ public class AccountLogin
 {
 	private String realAccount,password,rAccount,rPassword,rIp,startHour,startMin,endHour,endMin;
 	private MessageHandler handle;
-	//private AdvanceFunctionActivity.MessageHandler ahandle;
 	private String HTML=null;
-	//private String[] wanInfo;
 
 
-	public AccountLogin(String realAccount, String password, MessageHandler handle)
+	public AccountLogin(String realAccount, String password)
 	{
 		this.realAccount = realAccount;
 		this.password = password;
-		this.handle = handle;
 	}
-//	public AccountLogin(String realAccount, String password, MessageHandler handle)
-//	{
-//		this.realAccount = realAccount;
-//		this.password = password;
-//		this.handle = handle;
-//	}
 
 	public void setRoutInfo(String rAccount, String rPassword, String rIp)
 	{
@@ -33,14 +23,18 @@ public class AccountLogin
 		this.rPassword = rPassword;
 		this.rIp = rIp;
 	}
-	public void setLoginTime(String startHour,String startMin,String endHour,String endMin)
+	public void setLoginTime(String startHour, String startMin, String endHour, String endMin)
 	{
-		this.startHour=startHour;
-		this.startMin=startMin;
-		this.endHour=endHour;
-		this.endMin=endMin;
+		this.startHour = startHour;
+		this.startMin = startMin;
+		this.endHour = endHour;
+		this.endMin = endMin;
 	}
 
+	public void setHandler(MessageHandler handle)
+	{
+		this.handle=handle;
+	}
 	public HttpURLConnection getConnect(String path) throws MalformedURLException, IOException 
 	{
 		URL url=new URL(path);
@@ -70,7 +64,7 @@ public class AccountLogin
 			+ "sta_ip=0.0.0.0&sta_mask=0.0.0.0&linktype=4&waittime2=0&Connect=%C1%AC+%BD%D3";
 		return path;
 	}
-	public String loginPathAtTime(String account, String password,String startHour,String startMin,String endHour,String endMin)
+	public String loginPathAtTime(String account, String password, String startHour, String startMin, String endHour, String endMin)
 	{
 		String encodeAccount = null,encodePassWord = null;
 		try
@@ -95,96 +89,111 @@ public class AccountLogin
 			"&minute2=" +
 			endMin +
 			"&Save=%B1%A3+%B4%E6";
-			return path;
+		return path;
 	}
 
 	public void login()
 	{
-		new Thread(new Runnable(){
+		if (MessageStatus.isLogin == false)
+		{
+			new Thread(new Runnable(){
 
-				@Override
-				public void run()
-				{
-					if (MessageStatus.isLogin == false)
+					@Override
+					public void run()
 					{
 						try
 						{
 							HttpURLConnection connect=getConnect("http://" + rIp + loginPath(realAccount, password));
-							connect.getInputStream();
-							handle.sendEmptyMessage(MessageStatus.LOGIN_SUCCESS);
+							connect.connect();
+							//handle.sendEmptyMessage(MessageStatus.LOGIN_SUCCESS);
 						}
 						catch (IOException e)
-						{
-							System.out.println(e.getMessage());
-							handle.sendEmptyMessage(MessageStatus.LOGIN_FAIL);
-						}
-					}
-				}
-			}).start();
-	}
-	
-	public void loginAtTime()
-	{
-		new Thread(new Runnable(){
+						{}
 
-				@Override
-				public void run()
-				{
-					if (MessageStatus.isLogin == false)
-					{
-						try
-						{
-							HttpURLConnection connect= getConnect("http://"+rIp+loginPathAtTime(realAccount,password,startHour,startMin,endHour,endMin));
-							handle.sendEmptyMessage(MessageStatus.LOGIN_ING);
-							connect.getInputStream();
-							handle.sendEmptyMessage(MessageStatus.LOGIN_SUCCESS);
-						}
-						catch (IOException e)
-						{
-							System.out.println(e.getMessage());
-							handle.sendEmptyMessage(MessageStatus.LOGIN_FAIL);
-						}
 					}
-				}
-			}).start();
+				}).start();
+		}
 	}
-	
+//	public void login()
+//	{
+//		new Thread(new Runnable(){
+//
+//				@Override
+//				public void run()
+//				{
+//					if (MessageStatus.isLogin == false)
+//					{
+//						try
+//						{
+//							HttpURLConnection connect=getConnect("http://" + rIp + loginPath(realAccount, password));
+//							connect.getInputStream();
+//							handle.sendEmptyMessage(MessageStatus.LOGIN_SUCCESS);
+//						}
+//						catch (IOException e)
+//						{
+//							System.out.println(e.getMessage());
+//							handle.sendEmptyMessage(MessageStatus.LOGIN_FAIL);
+//						}
+//					}
+//				}
+//			}).start();
+//	}
+//
+//	public void loginAtTime()
+//	{
+//		new Thread(new Runnable(){
+//
+//				@Override
+//				public void run()
+//				{
+//					if (MessageStatus.isLogin == false)
+//					{
+//						try
+//						{
+//							HttpURLConnection connect= getConnect("http://" + rIp + loginPathAtTime(realAccount, password, startHour, startMin, endHour, endMin));
+//							handle.sendEmptyMessage(MessageStatus.LOGIN_ING);
+//							connect.getInputStream();
+//							handle.sendEmptyMessage(MessageStatus.LOGIN_SUCCESS);
+//						}
+//						catch (IOException e)
+//						{
+//							System.out.println(e.getMessage());
+//							handle.sendEmptyMessage(MessageStatus.LOGIN_FAIL);
+//						}
+//					}
+//				}
+//			}).start();
+//	}
+
 	public String getBase64Acc()
 	{
-		return "Basic " + Base64.encode(rAccount+":"+rPassword);
+		return "Basic " + Base64.encode(rAccount + ":" + rPassword);
 	}
 
 	public void checkLoginStatus(final String HTML)
 	{
-		new Thread(new Runnable(){
-
-				@Override
-				public void run()
+		System.out.println("check");
+		String KeywordWAN="var wanPara = new Array(";
+		int tIndex=HTML.indexOf(KeywordWAN) + KeywordWAN.length();
+		if (tIndex > 0)
+		{
+			int tEnd=HTML.indexOf(");", tIndex);
+			if (tEnd > tIndex)
+			{
+				String tArray=HTML.substring(tIndex, tEnd);
+				String[] wanInfo;
+				wanInfo = tArray.split(",");
+				//handle.sendMessage(handle.obtainMessage(MessageStatus.GET_WIFI_INFO_SUCCESS, wanInfo));
+				if (wanInfo[14].equals("1"))
 				{
-					System.out.println("check");
-					String KeywordWAN="var wanPara = new Array(";
-					int tIndex=HTML.indexOf(KeywordWAN) + KeywordWAN.length();
-					if (tIndex > 0)
-					{
-						int tEnd=HTML.indexOf(");", tIndex);
-						if (tEnd > tIndex)
-						{
-							String tArray=HTML.substring(tIndex, tEnd);
-							String[] wanInfo;
-							wanInfo = tArray.split(",");
-							//handle.sendMessage(handle.obtainMessage(MessageStatus.GET_WIFI_INFO_SUCCESS, wanInfo));
-							if (wanInfo[14].equals("1"))
-							{
-								handle.sendEmptyMessage(MessageStatus.WAN_SUCCESS);
-							}
-							else
-							{
-								handle.sendEmptyMessage(MessageStatus.NEED_LOGIN);
-							}
-						}
-					}
+					handle.sendEmptyMessage(MessageStatus.WAN_SUCCESS);
 				}
-			}).start();
+				else
+				{
+					handle.sendEmptyMessage(MessageStatus.NEED_LOGIN);
+				}
+			}
+		}
 	}
 	public void getWanHtml(final int want)
 	{
@@ -209,16 +218,16 @@ public class AccountLogin
 							temp.append(HTML);
 						}
 						HTML = temp.toString();
-						handle.sendMessage(handle.obtainMessage(want,HTML));
+						handle.sendMessage(handle.obtainMessage(want, HTML));
 					}
 					catch (IOException e)
 					{
 						System.out.println(e.toString());
-						if(e instanceof  java.net.SocketTimeoutException)
+						if (e instanceof  java.net.SocketTimeoutException)
 						{
 							handle.sendEmptyMessage(10);
 						}
-						else if(e instanceof java.net.ConnectException)
+						else if (e instanceof java.net.ConnectException)
 						{
 							handle.sendEmptyMessage(11);
 						}
@@ -232,30 +241,24 @@ public class AccountLogin
 	}
 	public void getWanInfo()
 	{
-		getWanHtml(MessageStatus.WANT_GET_HTML);
-		new Thread(new Runnable(){
-
-				@Override
-				public void run()
+		//getWanHtml(MessageStatus.WANT_GET_HTML);
+		if (HTML != null)
+		{
+			String KeywordWAN="var wanPara = new Array(";
+			int tIndex=HTML.indexOf(KeywordWAN) + KeywordWAN.length();
+			if (tIndex > 0)
+			{
+				int tEnd=HTML.indexOf(");", tIndex);
+				if (tEnd > tIndex)
 				{
-					if (HTML != null)
-					{
-						String KeywordWAN="var wanPara = new Array(";
-						int tIndex=HTML.indexOf(KeywordWAN) + KeywordWAN.length();
-						if (tIndex > 0)
-						{
-							int tEnd=HTML.indexOf(");", tIndex);
-							if (tEnd > tIndex)
-							{
-								String[] wanInfo;
-								String tArray=HTML.substring(tIndex, tEnd);
-								tArray=tArray.replace("\"","");
-								wanInfo = tArray.split(",");
-								handle.sendMessage(handle.obtainMessage(MessageStatus.GET_WIFI_INFO_SUCCESS, wanInfo));
-							}
-						}
-					}
-				}}).start();
+					String[] wanInfo;
+					String tArray=HTML.substring(tIndex, tEnd);
+					tArray = tArray.replace("\"", "");
+					wanInfo = tArray.split(",");
+					handle.sendMessage(handle.obtainMessage(MessageStatus.GET_WIFI_INFO_SUCCESS, wanInfo));
+				}
+			}
+		}
 	}
 }
 			

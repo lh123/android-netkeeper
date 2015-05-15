@@ -8,13 +8,15 @@ import java.io.*;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
+import java.net.*;
 
 public class UpdateCheck
 {
 	private Context context;
 	private DownLoadHandler handler=null;
-	private String version,versionName,name,path;
+	private String version,versionName,description,path;
 	private String currentVersionName;
+	//private boolean checkstatus==false;
 
 	public UpdateCheck(Context context)
 	{
@@ -32,7 +34,7 @@ public class UpdateCheck
 			PackageInfo pi=pm.getPackageInfo(context.getPackageName(), 0);
 			int currentVersion=pi.versionCode;
 			currentVersionName=pi.versionName;
-			return currentVersion;
+			return Integer.parseInt(currentVersionName.replace(".",""));
 		}
 		catch (PackageManager.NameNotFoundException e)
 		{
@@ -48,8 +50,11 @@ public class UpdateCheck
 				{
 					try
 					{
+						URL url=new URL("https://raw.githubusercontent.com/lh123/update-service/master/update.xml");
+						HttpURLConnection connect=(HttpURLConnection) url.openConnection();
+						connect.setConnectTimeout(3000);
 						DocumentBuilder db=DocumentBuilderFactory.newInstance().newDocumentBuilder();
-						Document doc=db.parse("https://raw.githubusercontent.com/lh123/update-service/master/update.xml");
+						Document doc=db.parse(connect.getInputStream());
 						Element root=doc.getDocumentElement();
 						NodeList list=root.getChildNodes();
 						for(int i=0;i<list.getLength();i++)
@@ -59,32 +64,40 @@ public class UpdateCheck
 							{
 								Element child=(Element) node;
 
-								if (("name".equals(child.getNodeName())))
-								{
-									name=child.getFirstChild().getNodeValue();
-								}
-								else if(child.getNodeName().endsWith("version"))
+								
+								if(child.getNodeName().equals(("version")))
 								{
 									version=child.getFirstChild().getNodeValue();
 								}
-								else if (("version_name".equals(child.getNodeName())))
+								else if ((child.getNodeName().equals("version_name")))
 								{
 									versionName=child.getFirstChild().getNodeValue();
 								}
+								else if ((child.getNodeName().equals("description")))
+								{
+									description=child.getFirstChild().getNodeValue();
+								}
+								
 								else if (("url".equals(child.getNodeName())))
 								{
 									path=child.getFirstChild().getNodeValue();
 								}
 							}
 						}
+						handler.sendEmptyMessage(MessageStatus.CHECK_UPDATE_SUCCESS);
 					}
 					catch (SAXException e)
-					{}
+					{
+						handler.sendEmptyMessage(MessageStatus.CHECK_UPDATE_FAILED);
+					}
 					catch (IOException e)
-					{}
+					{
+						handler.sendEmptyMessage(MessageStatus.CHECK_UPDATE_FAILED);
+					}
 					catch (ParserConfigurationException e)
-					{}
-					checkNeedUpdate();
+					{
+						handler.sendEmptyMessage(MessageStatus.CHECK_UPDATE_FAILED);
+					}
 				}
 			}).start();
 	}
@@ -92,7 +105,7 @@ public class UpdateCheck
 	public void showDialog()
 	{
 		new AlertDialog.Builder(context).setTitle("更新")
-		.setMessage("当前版本:"+currentVersionName+"\n最新版本:"+versionName)
+		.setMessage("当前版本:"+currentVersionName+"\n最新版本:"+versionName+"\n更新内容:\n"+description)
 			.setPositiveButton("升级", new DialogInterface.OnClickListener(){
 
 				@Override
@@ -102,12 +115,29 @@ public class UpdateCheck
 				}
 			})
 		.setNegativeButton("取消",null)
+		.setCancelable(false)
 		.show();
 	}
 	
 	protected void checkNeedUpdate()
 	{
-		if(getCurrentVersion()<Integer.parseInt(version))
+		int curren=getCurrentVersion();
+		int aimversion=Integer.parseInt(versionName.replace(".",""));
+		if(curren<aimversion)
+		{
+			handler.sendMessage(handler.obtainMessage(MessageStatus.NEED_UPDATE,path));
+		}
+		else
+		{
+			handler.sendEmptyMessage(MessageStatus.DONT_NEED_UPDATE);
+		}
+	}
+	
+	protected void checkNeedUpdateAuto()
+	{
+		int curren=getCurrentVersion();
+		int aimversion=Integer.parseInt(versionName.replace(".",""));
+		if(curren<aimversion)
 		{
 			handler.sendMessage(handler.obtainMessage(MessageStatus.NEED_UPDATE,path));
 		}

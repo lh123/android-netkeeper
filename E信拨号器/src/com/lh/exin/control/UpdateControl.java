@@ -1,5 +1,6 @@
-package com.lh.exin.update;
+package com.lh.exin.control;
 import android.content.*;
+import com.lh.exin.update.*;
 
 public class UpdateControl
 {
@@ -7,6 +8,7 @@ public class UpdateControl
 	private DownLoadHandler dHandler;
 	private UpdateCheck check;
 	private UpdateDownload down;
+	//public static boolean isAutoCheck=false;
 
 	public UpdateControl(Context context)
 	{
@@ -22,6 +24,7 @@ public class UpdateControl
 	}
 	public void startUpdate()
 	{
+		setUpdateInfo();
 		check.checkVersion();
 	}
 }
