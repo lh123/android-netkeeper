@@ -144,12 +144,28 @@
 				android:gravity="center">
 
 				<Button
-					android:layout_height="wrap_content"
-					android:layout_width="wrap_content"
+					android:layout_height="48dp"
+					android:layout_width="match_parent"
+					android:layout_marginLeft="5dp"
 					android:text="高级功能"
 					android:background="@drawable/button"
 					android:textColor="#FFFFFF"
-					android:id="@+id/but_advance"/>
+					android:id="@+id/but_advance"
+					android:textSize="16sp"
+					android:layout_weight="1.0"
+					android:layout_marginRight="5dp"/>
+
+				<Button
+					android:layout_height="48dp"
+					android:layout_width="match_parent"
+					android:layout_marginRight="5dp"
+					android:text="检查更新"
+					android:background="@drawable/button"
+					android:textColor="#FFFFFF"
+					android:id="@+id/btn_update"
+					android:textSize="16sp"
+					android:layout_weight="1.0"
+					android:layout_marginLeft="5dp"/>
 
 			</LinearLayout>
 

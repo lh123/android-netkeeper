@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="#ffffffff"
+	android:orientation="vertical"
+	tools:context="cn.sunflyer.simplenetkeeper.OntimeDial">
+
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textSize="20dp"
+		android:textColor="#FFFFFF"
+		android:background="#0099cc"
+		android:text="高级功能"
+		android:padding="10dp"/>
+
+	<ScrollView
+		android:scrollbars="none"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_gravity="left|top">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				android:paddingTop="20dp">
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:textSize="16dp"
+					android:layout_marginLeft="20dp"
+					android:layout_marginBottom="10dp"
+					android:text="设置定时拨号的时间"/>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="match_parent"
+					android:layout_marginLeft="20dp"
+					android:layout_marginBottom="10dp"
+					android:layout_height="wrap_content">
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:textSize="16dp"
+						android:text="拨号时间"/>
+
+					<EditText
+						android:layout_width="40dp"
+						android:layout_height="35dp"
+						android:id="@+id/adv_in_hour_start"
+						android:textSize="16dp"
+						android:inputType="number"
+						android:text="07"
+						android:hint="时"/>
+
+					<EditText
+						android:layout_width="40dp"
+						android:layout_height="35dp"
+						android:id="@+id/adv_in_minute_start"
+						android:textSize="16dp"
+						android:text="00"
+						android:inputType="number"
+						android:hint="分"/>
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:textSize="16dp"
+						android:text="断网时间"/>
+
+					<EditText
+						android:layout_width="40dp"
+						android:layout_height="35dp"
+						android:id="@+id/adv_in_hour_end"
+						android:textSize="16dp"
+						android:text="23"
+						android:inputType="number"
+						android:hint="时"/>
+
+					<EditText
+						android:layout_width="40dp"
+						android:layout_height="35dp"
+						android:id="@+id/adv_in_minute_end"
+						android:textSize="16dp"
+						android:text="30"
+						android:inputType="number"
+						android:hint="分"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="horizontal"
+					android:gravity="center"
+					android:layout_marginTop="10dp"
+					android:layout_marginBottom="20dp">
+
+					<Button
+						android:layout_width="100dp"
+						android:layout_height="40dp"
+						android:textSize="16dp"
+						android:id="@+id/adv_button_save"
+						android:background="@drawable/button"
+						android:layout_gravity="center"
+						android:layout_marginRight="10dp"
+						android:text="设置路由"
+						android:textColor="#FFFFFF"/>
+
+					<Button
+						android:layout_width="100dp"
+						android:layout_height="40dp"
+						android:textSize="16dp"
+						android:id="@+id/adv_button_restart"
+						android:background="@drawable/button"
+						android:layout_gravity="center"
+						android:layout_marginLeft="10dp"
+						android:text="重启路由"
+						android:textColor="#FFFFFF"/>
+
+				</LinearLayout>
+
+			</LinearLayout>
+
+		</LinearLayout>
+
+	</ScrollView>
+
+</LinearLayout>
+

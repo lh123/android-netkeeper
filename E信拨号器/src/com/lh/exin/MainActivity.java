@@ -1,24 +1,29 @@
 package com.lh.exin;
 
 import android.app.*;
+import android.content.*;
 import android.os.*;
 import android.telephony.*;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
 import com.lh.exin.account.*;
+import com.lh.exin.message.*;
+import com.lh.exin.routdata.*;
 import java.io.*;
 import org.json.*;
+import com.lh.exin.update.*;
 
 public class MainActivity extends Activity
 {
     private EditText edExAccount,edExPassword,edRoutAccount,edRoutPassword,edRoutIp;
-	private Button btnSet,btnInfo;
+	private Button btnSet,btnInfo,btnAdvance,btnUpdate;
 	private TextView tvStatus;
 	private CheckBox cbSave;
 	private MessageHandler handler;
 	private AccountLogin login;
-	private String exAccount,exRelAccount,exPassword,rAccount,rPassword,rIp;
+	private UpdateControl updateControl;
+	//private String exAccount,exRelAccount,exPassword,rAccount,rPassword,rIp;
     @Override
     public void onCreate(Bundle savedInstanceState)
 	{
@@ -32,11 +37,36 @@ public class MainActivity extends Activity
 		edRoutIp = (EditText) findViewById(R.id.rout_ip);
 		btnSet = (Button) findViewById(R.id.but_set);
 		btnInfo = (Button) findViewById(R.id.but_info);
+		btnAdvance=(Button) findViewById(R.id.but_advance);
+		btnUpdate=(Button) findViewById(R.id.btn_update);
 		tvStatus = (TextView) findViewById(R.id.tv_status);
 		cbSave = (CheckBox) findViewById(R.id.cb_save);
-		handler = new MessageHandler();
+		
+		handler = new MessageHandler(this,tvStatus,login);
+		updateControl=new UpdateControl(this);
 		readSavedInfo();
 		//checkIMEI();
+		btnUpdate.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View p1)
+				{
+					updateControl.setUpdateInfo();
+					updateControl.startUpdate();
+				}
+			});
+			
+		btnAdvance.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View p1)
+				{
+					readEdittext();
+					Intent i=new Intent();
+					i.setClass(MainActivity.this,AdvanceFunctionActivity.class);
+					startActivity(i);
+				}
+			});
 		btnSet.setOnClickListener(new OnClickListener(){
 
 				@Override
@@ -47,8 +77,8 @@ public class MainActivity extends Activity
 						if(MessageStatus.isLogin==false)
 						{
 						readEdittext();
-						login = new AccountLogin(exRelAccount, exPassword, handler);
-						login.setRoutInfo(rAccount, rPassword, rIp);
+						login = new AccountLogin(RoutInfo.exRelAccount, RoutInfo.exPassword, handler);
+						login.setRoutInfo(RoutInfo.rAccount, RoutInfo.rPassword, RoutInfo.rIp);
 						//login.login();
 						login.getWanHtml(MessageStatus.WANT_LOGIN);
 						checkIsSaved();
@@ -68,62 +98,14 @@ public class MainActivity extends Activity
 						if(login==null)
 						{
 							readEdittext();
-							login = new AccountLogin(exRelAccount, exPassword, handler);
-							login.setRoutInfo(rAccount, rPassword, rIp);
+							login = new AccountLogin(RoutInfo.exRelAccount, RoutInfo.exPassword, handler);
+							login.setRoutInfo(RoutInfo.rAccount, RoutInfo.rPassword, RoutInfo.rIp);
 						}
 						login.getWanHtml(MessageStatus.WANT_GET_WANINFO);
 						//login.getWanInfo();
 					}
 			});
     }
-	public class MessageHandler extends Handler
-	{
-
-		@Override
-		public void handleMessage(Message msg)
-		{
-			switch (msg.what)
-			{
-				case MessageStatus.LOGIN_ING:
-					tvStatus.setText("登陆中");
-					break;
-				case MessageStatus.LOGIN_SUCCESS:
-					tvStatus.setText("已连接");
-					MessageStatus.isLogin=true;
-					break;
-				case MessageStatus.LOGIN_FAIL:
-					tvStatus.setText("连接失败");
-					//login.login();
-					break;
-				case MessageStatus.GET_WIFI_INFO_SUCCESS:
-					showWanInfo((String[])msg.obj);
-					break;
-				case MessageStatus.WAN_SUCCESS:
-					tvStatus.setText("已连接");
-					MessageStatus.isLogin=true;
-					break;
-				case MessageStatus.GET_WAN_HTML_SUCCESS:
-					login.checkLoginStatus((String)msg.obj);
-					break;
-				case MessageStatus.WANT_GET_WANINFO:
-					login.getWanInfo();
-					break;
-				case MessageStatus.WANT_LOGIN:
-					//login.login();
-					login.checkLoginStatus((String)msg.obj);
-					break;
-				case MessageStatus.NEED_LOGIN:
-					login.login();
-					break;
-				case MessageStatus.WANT_GET_HTML:
-					break;
-				default:
-					tvStatus.setText("未知错误");
-			}
-			super.handleMessage(msg);
-		}
-
-	}
 	public void checkIsSaved()
 	{
 		File file =new File("/mnt/sdcard/EXinData.txt");
@@ -133,11 +115,11 @@ public class MainActivity extends Activity
 			String jsString = null;
 			try
 			{
-				js.put("exaccount", exAccount);
-				js.put("expassword", exPassword);
-				js.put("routip", rIp);
-				js.put("routaccount", rAccount);
-				js.put("routpassword", rPassword);
+				js.put("exaccount", RoutInfo.exAccount);
+				js.put("expassword", RoutInfo.exPassword);
+				js.put("routip", RoutInfo.rIp);
+				js.put("routaccount", RoutInfo.rAccount);
+				js.put("routpassword", RoutInfo.rPassword);
 				jsString = js.toString();
 			}
 			catch (JSONException e)
@@ -193,28 +175,14 @@ public class MainActivity extends Activity
 	}
 	public void readEdittext()
 	{
-		exAccount = edExAccount.getText().toString();
-		exRelAccount = AccountController.getRealAccount(exAccount);
-		exPassword = edExPassword.getText().toString();
-		rAccount = edRoutAccount.getText().toString();
-		rIp = edRoutIp.getText().toString();
-		rPassword = edRoutPassword.getText().toString();
+		RoutInfo.exAccount = edExAccount.getText().toString();
+		RoutInfo.exRelAccount = AccountController.getRealAccount(RoutInfo.exAccount);
+		RoutInfo.exPassword = edExPassword.getText().toString();
+		RoutInfo.rAccount = edRoutAccount.getText().toString();
+		RoutInfo.rIp = edRoutIp.getText().toString();
+		RoutInfo.rPassword = edRoutPassword.getText().toString();
 	}
-	public void showWanInfo(String[] backInfo)
-	{
-		StringBuffer temp=new StringBuffer();
-		temp.append("WAN口连接信息\n---------------------\n");
-		temp.append("外网连接状态： " + (backInfo[14].equals("1") ? "已经连接" : "未连接") + "\n");
-		temp.append("MAC地址: " + backInfo[1] + "\n");
-		temp.append("IP地址: " + backInfo[2] + "\n");
-		temp.append("子网掩码： " + backInfo[4] + "\n");
-		temp.append("网关地址： " + backInfo[7] + "\n");
-		temp.append("主DNS服务器： " + backInfo[11] + "\n"); 
-		temp.append("次DNS服务器: " + backInfo[12] + "\n");
-		temp.append("在线时间： " + backInfo[13] + "\n");
-		temp.append("---------------------");
-		new AlertDialog.Builder(this).setTitle("Wan信息").setMessage(temp.toString()).setPositiveButton("确定", null).show();
-	}
+
 	public boolean checkIMEI()
 	{
 		boolean canRun=false;

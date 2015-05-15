@@ -1,23 +1,31 @@
 package com.lh.exin.account;
 
 import com.lh.exin.*;
+import com.lh.exin.message.*;
 import java.io.*;
 import java.net.*;
 
 public class AccountLogin
 {
-	private String realAccount,password,rAccount,rPassword,rIp;
-	private MainActivity.MessageHandler handle;
+	private String realAccount,password,rAccount,rPassword,rIp,startHour,startMin,endHour,endMin;
+	private MessageHandler handle;
+	//private AdvanceFunctionActivity.MessageHandler ahandle;
 	private String HTML=null;
 	//private String[] wanInfo;
 
 
-	public AccountLogin(String realAccount, String password, MainActivity.MessageHandler handle)
+	public AccountLogin(String realAccount, String password, MessageHandler handle)
 	{
 		this.realAccount = realAccount;
 		this.password = password;
 		this.handle = handle;
 	}
+//	public AccountLogin(String realAccount, String password, MessageHandler handle)
+//	{
+//		this.realAccount = realAccount;
+//		this.password = password;
+//		this.handle = handle;
+//	}
 
 	public void setRoutInfo(String rAccount, String rPassword, String rIp)
 	{
@@ -25,7 +33,24 @@ public class AccountLogin
 		this.rPassword = rPassword;
 		this.rIp = rIp;
 	}
+	public void setLoginTime(String startHour,String startMin,String endHour,String endMin)
+	{
+		this.startHour=startHour;
+		this.startMin=startMin;
+		this.endHour=endHour;
+		this.endMin=endMin;
+	}
 
+	public HttpURLConnection getConnect(String path) throws MalformedURLException, IOException 
+	{
+		URL url=new URL(path);
+		HttpURLConnection connect=(HttpURLConnection) url.openConnection();
+		connect.setRequestProperty(
+			"Authorization", getBase64Acc());
+		connect.setConnectTimeout(3000);
+		connect.connect();
+		return connect;
+	}
 	public String loginPath(String account, String password)
 	{
 		String encodeAccount = null,encodePassWord = null;
@@ -45,6 +70,33 @@ public class AccountLogin
 			+ "sta_ip=0.0.0.0&sta_mask=0.0.0.0&linktype=4&waittime2=0&Connect=%C1%AC+%BD%D3";
 		return path;
 	}
+	public String loginPathAtTime(String account, String password,String startHour,String startMin,String endHour,String endMin)
+	{
+		String encodeAccount = null,encodePassWord = null;
+		try
+		{
+			encodeAccount = URLEncoder.encode(realAccount, "UTF-8").replace("+", "%20");
+			encodePassWord = URLEncoder.encode(password, "UTF-8");
+		}
+		catch (UnsupportedEncodingException e)
+		{}
+		String path ="/userRpm/PPPoECfgRpm.htm?wan=0&wantype=2&acc=" +
+			encodeAccount +
+			"&psw=" +
+			encodePassWord +
+			"&confirm=" +
+			encodePassWord +
+			"&specialDial=0&SecType=0&sta_ip=0.0.0.0&sta_mask=0.0.0.0&linktype=3&hour1=" +
+			startHour +
+			"&minute1=" +
+			startMin +
+			"&hour2=" +
+			endHour +
+			"&minute2=" +
+			endMin +
+			"&Save=%B1%A3+%B4%E6";
+			return path;
+	}
 
 	public void login()
 	{
@@ -57,13 +109,7 @@ public class AccountLogin
 					{
 						try
 						{
-							System.out.println("login");
-							URL url=new URL("http://" + rIp + loginPath(realAccount, password));
-							HttpURLConnection connect=(HttpURLConnection) url.openConnection();
-							handle.sendEmptyMessage(MessageStatus.LOGIN_ING);
-							connect.setRequestProperty(
-								"Authorization", getBase64Acc());
-							connect.connect();
+							HttpURLConnection connect=getConnect("http://" + rIp + loginPath(realAccount, password));
 							connect.getInputStream();
 							handle.sendEmptyMessage(MessageStatus.LOGIN_SUCCESS);
 						}
@@ -76,10 +122,36 @@ public class AccountLogin
 				}
 			}).start();
 	}
-	public static String getBase64Acc()
+	
+	public void loginAtTime()
 	{
-		return "Basic " + Base64.encode("admin" + ":"
-										+ "admin");
+		new Thread(new Runnable(){
+
+				@Override
+				public void run()
+				{
+					if (MessageStatus.isLogin == false)
+					{
+						try
+						{
+							HttpURLConnection connect= getConnect("http://"+rIp+loginPathAtTime(realAccount,password,startHour,startMin,endHour,endMin));
+							handle.sendEmptyMessage(MessageStatus.LOGIN_ING);
+							connect.getInputStream();
+							handle.sendEmptyMessage(MessageStatus.LOGIN_SUCCESS);
+						}
+						catch (IOException e)
+						{
+							System.out.println(e.getMessage());
+							handle.sendEmptyMessage(MessageStatus.LOGIN_FAIL);
+						}
+					}
+				}
+			}).start();
+	}
+	
+	public String getBase64Acc()
+	{
+		return "Basic " + Base64.encode(rAccount+":"+rPassword);
 	}
 
 	public void checkLoginStatus(final String HTML)
@@ -123,10 +195,10 @@ public class AccountLogin
 				{
 					try
 					{
-						URL url=new URL("http://" + rIp + "/userRpm/StatusRpm.htm");
-						HttpURLConnection connect=(HttpURLConnection) url.openConnection();
-						connect.setRequestProperty(
-							"Authorization", getBase64Acc());
+						//URL url=new URL();
+						HttpURLConnection connect=getConnect("http://" + rIp + "/userRpm/StatusRpm.htm");
+//						connect.setRequestProperty(
+//							"Authorization", getBase64Acc());
 						InputStream is=connect.getInputStream();
 						InputStreamReader isr=new InputStreamReader(is);
 						BufferedReader br=new BufferedReader(isr);
@@ -141,7 +213,19 @@ public class AccountLogin
 					}
 					catch (IOException e)
 					{
-						handle.sendEmptyMessage(-1);
+						System.out.println(e.toString());
+						if(e instanceof  java.net.SocketTimeoutException)
+						{
+							handle.sendEmptyMessage(10);
+						}
+						else if(e instanceof java.net.ConnectException)
+						{
+							handle.sendEmptyMessage(11);
+						}
+						else
+						{
+							handle.sendEmptyMessage(-1);
+						}
 					}
 				}
 			}).start();

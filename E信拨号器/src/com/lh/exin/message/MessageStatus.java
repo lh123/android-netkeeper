@@ -1,4 +1,4 @@
-package com.lh.exin;
+package com.lh.exin.message;
 
 public class MessageStatus
 {
@@ -13,4 +13,10 @@ public class MessageStatus
 	public static final int WANT_LOGIN=7;
 	public static final int WANT_GET_HTML=8;
 	public static final int NEED_LOGIN=9;
+	public static final int CONNECT_TIMEOUT=10;
+	public static final int CONNECT_FAIL=11;
+	public static final int NEED_UPDATE=12;
+	public static final int CONFIRM_UPDATE=13;
+	public static final int DOWN_SUCCESS=14;
+	public static final int DOWN_FAILED=15;
 }
