@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="@style/AppTheme.Base">
+	</style>
+	<style name="AppTheme.Base" parent="Theme.AppCompat.Light">
+		<item name="windowActionBar">false</item>
+		<item name="android:windowNoTitle">true</item>
+		<item name="colorPrimary">@color/blue</item>
+		<item name="android:windowBackground">@android:color/white</item>  
+		<item name="android:windowTranslucentStatus">true</item>
+		<item name="colorAccent">@color/dark_blue</item>
+		<item name="colorControlNormal">@color/dark_blue</item>
+		<item name="drawerArrowStyle">@style/AppTheme.DrawerArrowToggle</item>
+	</style>
+	<style name="AppTheme.DrawerArrowToggle" parent="Base.Widget.AppCompat.DrawerArrowToggle">
+		<item name="color">@android:color/white</item>
+	</style>
+	<dimen name="pading_top">0dp</dimen>
+</resources>

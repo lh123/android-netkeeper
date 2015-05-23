@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical">
+
+	<RelativeLayout
+		android:layout_height="150dp"
+		android:layout_width="match_parent"
+		android:elevation="5dp"
+		android:background="@color/blue">
+
+		<TextView
+			android:layout_marginTop="10dp"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:textColor="#FFFFFF"
+			android:textSize="46sp"
+			android:layout_centerHorizontal="false"
+			android:layout_marginLeft="10dp"
+			android:text="状态:"
+			android:id="@+id/mainfragmentTextView2"/>
+
+		<TextView
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:text="在线时长:"
+			android:layout_below="@id/mainfragmentTextView2"
+			android:layout_marginTop="13dp"
+			android:layout_marginLeft="10dp"
+			android:textColor="#FFFFFF"
+			android:id="@+id/mainfragmentTextView1"
+			android:textSize="30sp"/>
+
+		<TextView
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:layout_toRightOf="@id/mainfragmentTextView1"
+			android:layout_alignTop="@id/mainfragmentTextView1"
+			android:layout_marginLeft="10dp"
+			android:textColor="#FFFFFF"
+			android:textSize="30sp"
+			android:id="@+id/active_time"
+			android:text="正在获取"/>
+
+		<TextView
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:layout_toRightOf="@id/mainfragmentTextView2"
+			android:layout_alignTop="@id/mainfragmentTextView2"
+			android:textSize="46sp"
+			android:textColor="#FFFFFF"
+			android:layout_marginLeft="10dp"
+			android:id="@+id/tv_status"/>
+
+	</RelativeLayout>
+
+	<EditText
+		android:padding="8dp"
+		android:layout_gravity="center"
+		android:layout_width="match_parent"
+		android:layout_height="40dp"
+		android:layout_marginTop="10dp"
+		android:id="@+id/ex_account"
+		android:hint="E信账号"
+		android:textColor="#000000"/>
+
+	<EditText
+		android:padding="8dp"
+		android:layout_gravity="center"
+		android:layout_width="match_parent"
+		android:layout_height="40dp"
+		android:inputType="textPassword"
+		android:id="@+id/ex_password"
+		android:hint="E信密码"
+		android:textColor="#000000"
+		android:layout_marginTop="5dp"/>
+
+	<EditText
+		android:padding="8dp"
+		android:layout_gravity="center"
+		android:layout_width="match_parent"
+		android:layout_height="40dp"
+		android:layout_marginTop="5dp"
+		android:id="@+id/rout_ip"
+		android:hint="路由器ip地址"
+		android:textColor="#000000"/>
+
+	<EditText
+		android:padding="8dp"
+		android:layout_gravity="center"
+		android:layout_width="match_parent"
+		android:layout_height="40dp"
+		android:id="@+id/rout_account"
+		android:hint="路由器账户"
+		android:textColor="#000000"
+		android:layout_marginTop="5dp"/>
+
+	<EditText
+		android:padding="8dp"
+		android:layout_gravity="center"
+		android:layout_width="match_parent"
+		android:layout_height="40dp"
+		android:layout_marginBottom="5dp"
+		android:id="@+id/rout_password"
+		android:inputType="textPassword"
+		android:hint="路由器密码"
+		android:textColor="#000000"
+		android:layout_marginTop="5dp"/>
+
+	<LinearLayout
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		android:orientation="horizontal"
+		android:layout_marginRight="10dp">
+
+		<LinearLayout
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:orientation="horizontal">
+
+			<CheckBox
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="保存信息"
+				android:textColor="#0099cc"
+				android:id="@+id/cb_save"
+				android:checked="true"
+				android:gravity="center"
+				android:layout_marginLeft="20dp"/>
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:layout_marginTop="5dp"
+		android:layout_marginBottom="5dp"
+		android:orientation="horizontal">
+
+		<Button
+			android:layout_width="match_parent"
+			android:layout_height="48dp"
+			android:textSize="16dp"
+			android:layout_marginLeft="5dp"
+			android:id="@+id/but_set"
+			android:textColor="#FFFFFF"
+			android:layout_gravity="center"
+			android:text="连接"
+			android:layout_weight="1.0"
+			android:layout_marginRight="5dp"
+			android:background="@drawable/button"/>
+
+		<Button
+			android:layout_width="match_parent"
+			android:layout_height="48dp"
+			android:textSize="16dp"
+			android:layout_marginRight="5dp"
+			android:id="@+id/but_info"
+			android:textColor="#FFFFFF"
+			android:layout_gravity="center"
+			android:text="wan状态"
+			android:layout_weight="1.0"
+			android:layout_marginLeft="5dp"
+			android:background="@drawable/button"/>
+
+	</LinearLayout>
+
+</LinearLayout>
+
