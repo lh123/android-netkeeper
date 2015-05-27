@@ -68,7 +68,6 @@ public class RoutInfoSpace
 	public void readEdittext()
 	{
 		RoutData.exAccount = edExAccount.getText().toString();
-		RoutData.exRelAccount = AccountController.getRealAccount(RoutData.exAccount);
 		RoutData.exPassword = edExPassword.getText().toString();
 		RoutData.rAccount = edRoutAccount.getText().toString();
 		RoutData.rIp = edRoutIp.getText().toString();

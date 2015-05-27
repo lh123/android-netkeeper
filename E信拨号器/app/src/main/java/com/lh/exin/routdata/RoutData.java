@@ -11,7 +11,6 @@ public class RoutData
 	public static String endHour;
 	public static String endMin;
 	public static String exAccount;
-	public static String exRelAccount;
 	public static String exPassword;
 }
 

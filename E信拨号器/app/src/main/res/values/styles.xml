@@ -2,9 +2,7 @@
 <resources>
     <style name="AppTheme" parent="@style/AppTheme.Base">
 	</style>
-	<style name="AppTheme.Base" parent="Theme.AppCompat.Light">
-		<item name="windowActionBar">false</item>
-		<item name="android:windowNoTitle">true</item>
+	<style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
 		<item name="colorPrimary">@color/blue</item>
 		<item name="android:windowBackground">@android:color/white</item>  
 		<item name="android:windowTranslucentStatus">true</item>

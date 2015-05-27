@@ -13,9 +13,9 @@ public class ToolbarControl
 	private Toolbar toolbar;
 	private DrawerLayout drawer;
 	private ActionBarDrawerToggle toggle;
-	private ActionBarActivity activity;
+	private AppCompatActivity activity;
 
-	public ToolbarControl(ActionBarActivity activity)
+	public ToolbarControl(AppCompatActivity activity)
 	{
 		this.activity = activity;
 	}

@@ -17,5 +17,5 @@ public class MessageStatus
 	public static final int CONNECT_FAILED=12;
 	public static final int CREAT_WAN_DIALOG=13;
 	public static final int CANNOT_CONNECT_ROUT = 14;
-	
+	public static final int SHOW_WAITING_DIALIG=15;
 }

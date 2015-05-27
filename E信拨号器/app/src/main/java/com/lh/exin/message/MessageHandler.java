@@ -31,10 +31,14 @@ public class MessageHandler extends Handler
 				tvStatus.setText("连接失败(网络断开)");
 				break;
 			case MessageStatus.CREAT_WAN_DIALOG:
+				login.showWaitingDialog(1);
 				login.showWanInfo((String[])msg.obj);
 				break;
 			case MessageStatus.CANNOT_CONNECT_ROUT:
-				tvStatus.setText("未知");
+				tvStatus.setText("无法连接路由器");
+				break;
+			case MessageStatus.SHOW_WAITING_DIALIG:
+				login.showWaitingDialog(0);
 				break;
 			default:
 				tvStatus.setText("未知错误");

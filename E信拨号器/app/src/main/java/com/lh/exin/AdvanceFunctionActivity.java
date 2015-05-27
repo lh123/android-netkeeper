@@ -1,6 +1,7 @@
 package com.lh.exin;
-import android.app.*;
+
 import android.os.*;
+import android.support.v7.app.*;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
@@ -8,9 +9,8 @@ import com.lh.exin.account.*;
 import com.lh.exin.message.*;
 import com.lh.exin.routdata.*;
 import com.lh.exin.toolbar.*;
-import android.support.v7.app.*;
 
-public class AdvanceFunctionActivity extends ActionBarActivity
+public class AdvanceFunctionActivity extends AppCompatActivity
 {
 	private EditText edStartHour,edStrartMin,edEndHour,edEndMin;
 	private Button btnSet;
@@ -21,8 +21,8 @@ public class AdvanceFunctionActivity extends ActionBarActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		setContentView(R.layout.activity_advance);
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_advance);
 		init();
 	}
 	

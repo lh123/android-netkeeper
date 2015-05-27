@@ -1,7 +1,5 @@
 package com.lh.exin;
 
-
-
 import android.content.*;
 import android.os.*;
 import android.support.v7.app.*;
@@ -12,7 +10,7 @@ import com.lh.exin.*;
 import com.lh.exin.listdata.*;
 import com.lh.exin.toolbar.*;
 
-public class MainActivity extends ActionBarActivity implements OnItemClickListener
+public class MainActivity extends AppCompatActivity implements OnItemClickListener
 {
 	private ListView listview;
 	private ToolbarControl toolbar;
@@ -46,6 +44,7 @@ public class MainActivity extends ActionBarActivity implements OnItemClickListen
 		DrawerListAdapter adapter=new DrawerListAdapter(MainActivity.this);
 		listview.setAdapter(adapter);
 	}
+	
 	long last=-1,current=-1;
 
 	@Override
