@@ -1,4 +1,4 @@
-package com.lh.exin;
+package com.lh.exin.activity;
 
 import android.os.*;
 import android.support.v7.app.*;
@@ -9,15 +9,16 @@ import com.lh.exin.account.*;
 import com.lh.exin.message.*;
 import com.lh.exin.routdata.*;
 import com.lh.exin.toolbar.*;
+import com.lh.exin.*;
 
 public class AdvanceFunctionActivity extends AppCompatActivity
 {
 	private EditText edStartHour,edStrartMin,edEndHour,edEndMin;
 	private Button btnSet;
-	private AccountLogin login;
+	private Rout login;
 	private ToolbarControl toolbar;
 	private MessageHandler handler;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -29,7 +30,7 @@ public class AdvanceFunctionActivity extends AppCompatActivity
 	public void init()
 	{
 		toolbar=new ToolbarControl(this);
-		toolbar.initToolbarNoDrawer();
+		toolbar.initToolbarNoDrawer("定时连接");
 		btnSet=(Button)findViewById(R.id.adv_button_save);
 		edStartHour=(EditText) findViewById(R.id.adv_in_hour_start);
 		edStrartMin=(EditText) findViewById(R.id.adv_in_minute_start);
@@ -41,10 +42,6 @@ public class AdvanceFunctionActivity extends AppCompatActivity
 				public void onClick(View p1)
 				{
 					readTime();
-					//login = new AccountLogin(RoutInfo.exRelAccount, RoutInfo.exPassword, handler);
-					login.setRoutInfo(RoutData.rAccount, RoutData.rPassword, RoutData.rIp);
-					login.setLoginTime(RoutData.startHour,RoutData.startMin,RoutData.endHour,RoutData.endMin);
-					//login.loginAtTime();
 				}
 			});
 	}

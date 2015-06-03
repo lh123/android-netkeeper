@@ -1,12 +1,14 @@
 package com.lh.exin.toolbar;
-
+import android.graphics.*;
+import android.graphics.drawable.*;
+import android.support.v4.view.*;
 import android.support.v4.widget.*;
 import android.support.v7.app.*;
 import android.support.v7.widget.*;
 import android.view.*;
 import android.view.View.*;
 import com.lh.exin.*;
-import android.graphics.*;
+import android.os.*;
 
 public class ToolbarControl
 {
@@ -14,6 +16,7 @@ public class ToolbarControl
 	private DrawerLayout drawer;
 	private ActionBarDrawerToggle toggle;
 	private AppCompatActivity activity;
+	private boolean isOpen=false;
 
 	public ToolbarControl(AppCompatActivity activity)
 	{
@@ -21,28 +24,42 @@ public class ToolbarControl
 	}
 	public void initToolbar()
 	{
-		toolbar=(Toolbar) activity.findViewById(R.id.toolbar);
-		drawer=(DrawerLayout) activity.findViewById(R.id.drawerlayout);
+		toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
+		drawer = (DrawerLayout) activity.findViewById(R.id.drawerlayout);
 		toolbar.setTitle("E信拨号器");
-		toolbar.setTitleTextColor(Color.WHITE);
 		activity.setSupportActionBar(toolbar);
 		activity.getSupportActionBar().setHomeButtonEnabled(true);
 		activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		toggle=new ActionBarDrawerToggle(activity,drawer,toolbar,R.string.open,R.string.close);
+		toggle = new ActionBarDrawerToggle(activity, drawer, toolbar, R.string.open, R.string.close){
+			public void onDrawerOpened(View drawerView)
+			{
+				isOpen=true;
+			}
+			public void onDrawerClosed(View drawerView)
+			{
+				isOpen=false;
+			}
+		};
 		toggle.syncState();
 		drawer.setDrawerListener(toggle);
 		drawer.setStatusBarBackground(R.color.blue);
-		
+
 	}
-	public void initToolbarNoDrawer()
+	public void initToolbarNoDrawer(String title)
 	{
-		toolbar=(Toolbar) activity.findViewById(R.id.toolbar);
-		toolbar.setTitleTextColor(Color.WHITE);
-		toolbar.setTitle("定时连接");
-		toolbar.setElevation(5);
-		activity.setSupportActionBar(toolbar);
-		activity.getSupportActionBar().setHomeButtonEnabled(true);
-		activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
+		toolbar.setTitle(title);
+		ViewCompat.setElevation(toolbar, 10);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) 
+		{
+			Drawable drawable = activity.getApplication().getApplicationContext().getDrawable(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+			drawable.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
+			toolbar.setNavigationIcon(drawable);
+		}
+		else
+		{
+			toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+		}
 		toolbar.setNavigationOnClickListener(new OnClickListener(){
 
 				@Override
@@ -51,6 +68,11 @@ public class ToolbarControl
 					activity.finish();
 				}
 			});
+	}
+	
+	public boolean drawerStatus()
+	{
+		return isOpen;
 	}
 	
 	public void closeDrawer()

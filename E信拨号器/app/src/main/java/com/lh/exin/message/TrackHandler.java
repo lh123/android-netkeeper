@@ -9,13 +9,13 @@ public class TrackHandler extends Handler
 
 	private Context context;
 	private TextView tvStatus;
-	private AccountLogin login;
+	private Rout login;
 	public TrackHandler(Context context, TextView tvStatus)
 	{
 		this.context = context;
 		this.tvStatus = tvStatus;
 	}
-	public void setLogin(AccountLogin login)
+	public void setLogin(Rout login)
 	{
 		this.login=login;
 	}

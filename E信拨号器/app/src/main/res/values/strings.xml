@@ -2,6 +2,7 @@
 <resources>
     <string name="hello">Hello World, MainActivity!</string>
     <string name="app_name">E信拨号器</string>
+	<string name="about">作者：lh\n简介：本软件用于在路由器上登录E信\n本软件代码托管在github\n链接：https://github.com/lh123/android-netkeeper</string>
 	<string name="open">1</string>
 	<string name="close">2</string>
 </resources>

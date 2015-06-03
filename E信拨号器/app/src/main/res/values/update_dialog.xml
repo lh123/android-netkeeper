@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<style name="Update.Theme" parent="Theme.AppCompat.Dialog">
+		<item name="colorPrimary">@color/blue</item>
+		<item name="colorAccent">@color/dark_blue</item>
+		<item name="colorControlNormal">@color/dark_blue</item>
+	</style>
+</resources>

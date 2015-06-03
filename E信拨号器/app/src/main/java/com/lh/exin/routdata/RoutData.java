@@ -1,4 +1,6 @@
 package com.lh.exin.routdata;
+import com.lh.exin.control.*;
+import java.util.*;
 
 public class RoutData
 {
@@ -12,6 +14,7 @@ public class RoutData
 	public static String endMin;
 	public static String exAccount;
 	public static String exPassword;
+	public static RoutControl routControl;
 }
 
 

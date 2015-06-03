@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
@@ -35,57 +36,57 @@
 
 	</LinearLayout>
 
-	<EditText
-		android:padding="8dp"
+	<com.rengwuxian.materialedittext.MaterialEditText
 		android:layout_gravity="center"
 		android:layout_width="match_parent"
-		android:layout_height="40dp"
+		android:layout_height="wrap_content"
 		android:id="@+id/ex_account"
-		android:hint="E信账号"
+		app:met_floatingLabel="normal"
+		android:hint="E信账户"
 		android:textColor="#000000"
-		android:layout_margin="10dp"/>
+		android:layout_margin="5dp"/>
 
-	<EditText
-		android:padding="8dp"
+	<com.rengwuxian.materialedittext.MaterialEditText
 		android:layout_gravity="center"
 		android:layout_width="match_parent"
-		android:layout_height="40dp"
+		android:layout_height="wrap_content"
 		android:inputType="textPassword"
 		android:id="@+id/ex_password"
+		app:met_floatingLabel="normal"
 		android:hint="E信密码"
 		android:textColor="#000000"
-		android:layout_margin="10dp"/>
+		android:layout_margin="5dp"/>
 
-	<EditText
-		android:padding="8dp"
+	<com.rengwuxian.materialedittext.MaterialEditText
 		android:layout_gravity="center"
 		android:layout_width="match_parent"
-		android:layout_height="40dp"
+		android:layout_height="wrap_content"
 		android:id="@+id/rout_ip"
+		app:met_floatingLabel="normal"
 		android:hint="路由器ip地址"
 		android:textColor="#000000"
-		android:layout_margin="10dp"/>
+		android:layout_margin="5dp"/>
 
-	<EditText
-		android:padding="8dp"
+	<com.rengwuxian.materialedittext.MaterialEditText
 		android:layout_gravity="center"
 		android:layout_width="match_parent"
-		android:layout_height="40dp"
+		android:layout_height="wrap_content"
 		android:id="@+id/rout_account"
+		app:met_floatingLabel="normal"
 		android:hint="路由器账户"
 		android:textColor="#000000"
-		android:layout_margin="10dp"/>
+		android:layout_margin="5dp"/>
 
-	<EditText
-		android:padding="8dp"
+	<com.rengwuxian.materialedittext.MaterialEditText
 		android:layout_gravity="center"
 		android:layout_width="match_parent"
-		android:layout_height="40dp"
+		android:layout_height="wrap_content"
 		android:id="@+id/rout_password"
 		android:inputType="textPassword"
+		app:met_floatingLabel="normal"
 		android:hint="路由器密码"
 		android:textColor="#000000"
-		android:layout_margin="10dp"/>
+		android:layout_margin="5dp"/>
 
 	<LinearLayout
 		android:layout_height="wrap_content"
@@ -102,7 +103,7 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:text="保存信息"
-				android:textColor="#0099cc"
+				android:textColor="@color/blue"
 				android:id="@+id/cb_save"
 				android:checked="true"
 				android:gravity="center"

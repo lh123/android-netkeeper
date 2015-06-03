@@ -8,14 +8,14 @@ public class MessageHandler extends Handler
 {
 	private Context context;
 	private TextView tvStatus;
-	private AccountLogin login;
+	private Rout login;
 
 	public MessageHandler(Context context, TextView tvStatus)
 	{
 		this.context = context;
 		this.tvStatus = tvStatus;
 	}
-	public void setLogin(AccountLogin login)
+	public void setLogin(Rout login)
 	{
 		this.login=login;
 	}
@@ -24,21 +24,22 @@ public class MessageHandler extends Handler
 	{
 		switch (msg.what)
 		{
-			case MessageStatus.CONNECT_TIMEOUT:
-				tvStatus.setText("连接超时");
-				break;
-			case MessageStatus.CONNECT_FAILED:
-				tvStatus.setText("连接失败(网络断开)");
-				break;
 			case MessageStatus.CREAT_WAN_DIALOG:
-				login.showWaitingDialog(1);
+				login.closeWaitingDialog(1);
 				login.showWanInfo((String[])msg.obj);
 				break;
 			case MessageStatus.CANNOT_CONNECT_ROUT:
+				login.closeWaitingDialog(2);
 				tvStatus.setText("无法连接路由器");
 				break;
 			case MessageStatus.SHOW_WAITING_DIALIG:
-				login.showWaitingDialog(0);
+				login.showWaitingDialog((String)msg.obj);
+				break;
+			case MessageStatus.CLOSE_WAITING_DIALOG:
+				login.closeWaitingDialog(1);
+				break;
+			case MessageStatus.RESTART_ROUT_SUCCESS:
+				login.closeWaitingDialog(3);
 				break;
 			default:
 				tvStatus.setText("未知错误");

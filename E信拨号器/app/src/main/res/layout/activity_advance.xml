@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
@@ -23,6 +24,7 @@
 			android:textSize="16dp"
 			android:layout_marginLeft="20dp"
 			android:layout_marginBottom="10dp"
+			android:textColor="#000000"
 			android:text="设置定时拨号的时间"/>
 
 		<LinearLayout
@@ -36,22 +38,24 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:textSize="16dp"
+				android:textColor="#000000"
 				android:text="拨号时间"/>
 
-			<EditText
+			<com.rengwuxian.materialedittext.MaterialEditText
 				android:layout_width="40dp"
-				android:layout_height="35dp"
+				android:layout_height="wrap_content"
 				android:id="@+id/adv_in_hour_start"
-				android:textSize="16dp"
 				android:inputType="number"
+				android:gravity="center"
 				android:text="07"
-				android:hint="时"/>
+				android:hint="时"
+				android:layout_marginRight="5dp"/>
 
-			<EditText
+			<com.rengwuxian.materialedittext.MaterialEditText
 				android:layout_width="40dp"
-				android:layout_height="35dp"
+				android:layout_height="wrap_content"
 				android:id="@+id/adv_in_minute_start"
-				android:textSize="16dp"
+				android:gravity="center"
 				android:text="00"
 				android:inputType="number"
 				android:hint="分"/>
@@ -60,22 +64,25 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:textSize="16dp"
-				android:text="断网时间"/>
+				android:text="断网时间"
+				android:textColor="#000000"/>
 
-			<EditText
+			<com.rengwuxian.materialedittext.MaterialEditText
 				android:layout_width="40dp"
-				android:layout_height="35dp"
+				android:layout_height="wrap_content"
 				android:id="@+id/adv_in_hour_end"
-				android:textSize="16dp"
+				android:gravity="center"
 				android:text="23"
 				android:inputType="number"
-				android:hint="时"/>
+				android:hint="时"
+				android:layout_marginRight="5dp"/>
 
-			<EditText
+			<com.rengwuxian.materialedittext.MaterialEditText
 				android:layout_width="40dp"
-				android:layout_height="35dp"
+				android:layout_height="wrap_content"
 				android:id="@+id/adv_in_minute_end"
-				android:textSize="16dp"
+				
+				android:gravity="center"
 				android:text="30"
 				android:inputType="number"
 				android:hint="分"/>
@@ -104,8 +111,6 @@
 		</LinearLayout>
 
 	</LinearLayout>
-
-
 
 </LinearLayout>
 

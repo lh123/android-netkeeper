@@ -11,15 +11,15 @@ import java.util.*;
 import android.os.*;
 import android.widget.*;
 
-public class AccountLogin
+public class Rout
 {
-	private String realAccount,account,password,rAccount,rPassword,rIp,startHour,startMin,endHour,endMin;
+	private String realAccount;
 	private MessageHandler handle;
 	private TrackHandler thandle;
 	private Context context;
 	private String HTML;
 	private ProgressDialog pd;
-	private long trackTime=2000;
+	private long trackTime=2500;
 
 	public static final int CONNECTION_NOT_CONNECTED=0;
 	public static final int CONNECTION_SUCCESS=1;
@@ -42,10 +42,8 @@ public class AccountLogin
 		"WAN口未连接"
 	};
 
-	public AccountLogin(String account, String password, Context context)
+	public Rout(Context context)
 	{
-		this.account = account;
-		this.password = password;
 		this.context = context;
 	}
 
@@ -54,19 +52,6 @@ public class AccountLogin
 		this.trackTime = trackTime;
 	}
 
-	public void setRoutInfo(String rAccount, String rPassword, String rIp)
-	{
-		this.rAccount = rAccount;
-		this.rPassword = rPassword;
-		this.rIp = rIp;
-	}
-	public void setLoginTime(String startHour, String startMin, String endHour, String endMin)
-	{
-		this.startHour = startHour;
-		this.startMin = startMin;
-		this.endHour = endHour;
-		this.endMin = endMin;
-	}
 	public void setHandler(MessageHandler handle, TrackHandler thandle)
 	{
 		this.handle = handle;
@@ -133,18 +118,24 @@ public class AccountLogin
 
 	public void login()
 	{
-		if (checkWanStatus() == false)
+		if (checkWanStatus() == true)
 		{
-			try
+			handle.sendEmptyMessage(MessageStatus.CLOSE_WAITING_DIALOG);
+			return;
+		}
+		try
+		{
+			if (RoutData.exAccount != null && RoutData.exPassword != null)
 			{
-				realAccount = AccountController.getRealAccount(account);
-				HTML = getRespond(getConnect("http://" + rIp + loginPath(realAccount, password)));
+				realAccount = AccountController.getRealAccount(RoutData.exAccount);
+				HTML = getRespond(getConnect("http://" + RoutData.rIp + loginPath(realAccount, RoutData.exPassword)));
+				closeWaitingDialog(1);
 				startTrack();
 			}
-			catch (IOException e)
-			{
-				handle.sendEmptyMessage(MessageStatus.CANNOT_CONNECT_ROUT);
-			}
+		}
+		catch (IOException e)
+		{
+			handle.sendEmptyMessage(MessageStatus.CANNOT_CONNECT_ROUT);
 		}
 	}
 
@@ -155,7 +146,7 @@ public class AccountLogin
 
 	public String getBase64Acc()
 	{
-		return "Basic " + Base64.encodeToString((rAccount + ":" + rPassword).getBytes(), Base64.DEFAULT);
+		return "Basic " + Base64.encodeToString((RoutData.rAccount + ":" + RoutData.rPassword).getBytes(), Base64.DEFAULT);
 	}
 
 
@@ -163,7 +154,7 @@ public class AccountLogin
 	{
 		try
 		{
-			HTML = getRespond(getConnect("http://" + rIp + "/userRpm/StatusRpm.htm"));
+			HTML = getRespond(getConnect("http://" + RoutData.rIp + "/userRpm/StatusRpm.htm"));
 			if (HTML != null)
 			{
 				String KeywordWAN="var wanPara = new Array(";
@@ -214,7 +205,7 @@ public class AccountLogin
 				System.out.println("当前速度" + trackTime);
 				String[] pppoeInf;
 				pppoeInf = getWanInfo();
-				if (pppoeInf == null)
+				if (pppoeInf == null || count > 10||pppoeInf.length<14)
 				{
 					Thread.sleep(trackTime);
 					return;
@@ -258,37 +249,98 @@ public class AccountLogin
 		}
 		return RoutData.isLogin;
 	}
+	
+	public ArrayList<DrivesInfo> getDrivesList()
+	{
+		try
+		{
+			HTML = getRespond(getConnect("http://" + RoutData.rIp + "/userRpm/AssignedIpAddrListRpm.htm"));
+			String keyWords="var DHCPDynList = new Array(";
+			int index=HTML.indexOf(keyWords)+keyWords.length();
+			if(index>0)
+			{
+				int indexEnd=HTML.indexOf(");",index);
+				if(indexEnd>index)
+				{
+					String[] drivesList;
+					String[] single=new String[4];
+					DrivesInfo drivesInfo;
+					String info=HTML.substring(index,indexEnd);
+					info=info.replaceAll("\"","");
+					drivesList=info.split(",");
+					ArrayList<DrivesInfo> drivesArray=new ArrayList<DrivesInfo>();
+					for(int i=0;i<drivesList.length/4;i++)
+					{
+						drivesInfo=new DrivesInfo();
+						for(int j=0;j<4;j++)
+						{
+							single[j]=drivesList[i*4+j];
+						}
+						drivesInfo.setDrivesInfo(single[0],single[1],single[2],single[3]);
+						drivesArray.add(drivesInfo);
+					}
+					return drivesArray;
+				}
+			}
+		}
+		catch (IOException e)
+		{
+			handle.sendEmptyMessage(MessageStatus.CANNOT_CONNECT_ROUT);
+		}
+		return null;
+	}
 
-	public void showWaitingDialog(int what)
+	public void showWaitingDialog(String message)
+	{
+		if (pd == null)
+		{
+			pd = new ProgressDialog(context);
+			pd.setTitle("正在处理");
+			pd.setMessage(message);
+			pd.setCancelable(false);
+			pd.show();
+		}
+	}
+
+	public void closeWaitingDialog(int what)
 	{
 		switch (what)
 		{
-			case 0:
-				if (pd == null)
-				{
-					pd = new ProgressDialog(context);
-					pd.setTitle("正在处理");
-					pd.setMessage("正在连接路由器");
-					pd.setCancelable(false);
-					pd.show();
-				}
-				break;
 			case 1:
-				if(pd!=null)
+				if (pd != null)
 				{
 					pd.cancel();
-					pd=null;
+					pd = null;
 				}
 				break;
 			case 2:
-				if(pd!=null)
+				if (pd != null)
 				{
 					pd.cancel();
-					pd=null;
-					Toast.makeText(context,"连接失败,请检查网络连接",Toast.LENGTH_SHORT).show();
+					pd = null;
+					Toast.makeText(context, "连接失败,请检查网络连接", Toast.LENGTH_SHORT).show();
+				}
+				break;
+			case 3:
+				if (pd != null)
+				{
+					pd.cancel();
+					pd = null;
+					Toast.makeText(context, "重启指令发送成功", Toast.LENGTH_SHORT).show();
 				}
 		}
-
+	}
+	public void restartRout()
+	{
+		try
+		{
+			HTML = getRespond(getConnect("http://" + RoutData.rIp + "/userRpm/SysRebootRpm.htm?Reboot=%D6%D8%C6%F4%C2%B7%D3%C9%C6%F7"));
+		}
+		catch (IOException e)
+		{
+			handle.sendEmptyMessage(MessageStatus.CANNOT_CONNECT_ROUT);
+		}
+		handle.sendEmptyMessage(MessageStatus.RESTART_ROUT_SUCCESS);
 	}
 
 	public void showWanInfo(String[] backInfo)

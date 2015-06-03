@@ -10,36 +10,44 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:orientation="vertical">
-		<include 
+
+		<include
 			layout="@layout/toolbar"/>
+
 		<fragment
-			android:name="com.lh.exin.MainFragment"
+			android:id="@+id/mainfragment"
+			android:name="com.lh.exin.activity.MainFragment"
 			android:layout_height="match_parent"
 			android:layout_width="match_parent">
+
 		</fragment>
+
 	</LinearLayout>
-	
+
+	<LinearLayout
+		android:layout_height="match_parent"
+		android:layout_gravity="start"
+		android:layout_width="300dp"
+		android:background="@android:color/white"
+		android:orientation="vertical"
+		android:clickable="true">
+
 		<LinearLayout
-			android:layout_height="match_parent"
-			android:layout_gravity="start"
-			android:layout_width="300dp"
-			android:background="@android:color/white"
-			android:orientation="vertical"
-			android:clickable="true">
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="188dp"
-				android:background="@drawable/material"/>
+			android:layout_width="match_parent"
+			android:layout_height="188dp"
+			android:background="@drawable/material"/>
 
-			<ListView
-				android:paddingTop="10dp"
-				android:layout_height="wrap_content"
-				android:layout_width="match_parent"
-				android:id="@+id/drawerlistView"
-				android:dividerHeight="0dp"
-				android:divider="#00000000">
+		<ListView
+			android:paddingTop="10dp"
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:id="@+id/drawerlistView"
+			android:dividerHeight="0dp"
+			android:divider="#00000000">
 
-			</ListView>
-		</LinearLayout>
+		</ListView>
+
+	</LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>
+

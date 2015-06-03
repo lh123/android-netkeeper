@@ -1,17 +1,22 @@
-package com.lh.exin;
+package com.lh.exin.activity;
 
-import android.app.*;
 import android.os.*;
+import android.support.v4.app.*;
+import android.text.*;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
 import com.lh.exin.control.*;
 import com.lh.exin.routinfospace.*;
+import com.rengwuxian.materialedittext.*;
+import com.rengwuxian.materialedittext.validation.*;
+import com.umeng.analytics.*;
+import android.graphics.*;
 
 public class MainFragment extends Fragment
 {
 	private View view;
-    private EditText edExAccount,edExPassword,edRoutAccount,edRoutPassword,edRoutIp;
+    private MaterialEditText edExAccount,edExPassword,edRoutAccount,edRoutPassword,edRoutIp;
 	private Button btnSet,btnInfo;
 	private TextView tvStatus;
 	private CheckBox cbSave;
@@ -26,11 +31,11 @@ public class MainFragment extends Fragment
 	}
 	public void init()
 	{
-		edExAccount = (EditText) view.findViewById(R.id.ex_account);
-		edExPassword = (EditText) view.findViewById(R.id.ex_password);
-		edRoutAccount = (EditText) view.findViewById(R.id.rout_account);
-		edRoutPassword = (EditText) view.findViewById(R.id.rout_password);
-		edRoutIp = (EditText) view.findViewById(R.id.rout_ip);
+		edExAccount =  (MaterialEditText) view.findViewById(R.id.ex_account);
+		edExPassword = (MaterialEditText) view.findViewById(R.id.ex_password);
+		edRoutAccount = (MaterialEditText) view.findViewById(R.id.rout_account);
+		edRoutPassword =(MaterialEditText) view.findViewById(R.id.rout_password);
+		edRoutIp = (MaterialEditText) view.findViewById(R.id.rout_ip);
 		btnSet = (Button) view.findViewById(R.id.but_set);
 		btnInfo = (Button) view.findViewById(R.id.but_info);
 		tvStatus = (TextView) view.findViewById(R.id.tv_status);
@@ -53,7 +58,9 @@ public class MainFragment extends Fragment
 				@Override
 				public void onClick(View p1)
 				{
+					long current=System.currentTimeMillis();
 					routControl.getWanInfo();
+					MobclickAgent.onEventDuration(getActivity(),"获取WAN信息",System.currentTimeMillis()-current);
 				}
 			});
 	}

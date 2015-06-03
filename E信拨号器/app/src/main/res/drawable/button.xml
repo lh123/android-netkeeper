@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ripple
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="@color/dark_blue">
-	<item>
-		<shape
-			android:shape="rectangle">
-			<corners android:radius="5dp"/>
-			<solid android:color="@color/blue" />
-		</shape>
-    </item>
-</ripple>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">  
+    <!-- 按钮按下时的样式 -->  
+    <item android:state_pressed="true">  
+        <!-- shape：按钮形状 -->  
+        <shape android:shape="rectangle">  
+            <!-- solid：背景填充颜色 -->  
+            <solid android:color="@color/dark_blue" />      
+            <!-- corners：圆角 -->  
+            <corners android:radius="5dip" />   
+            <!-- padding：内边距 -->  
+        </shape>  
+    </item>  
+    <!-- 按钮正常时的样式 -->  
+    <item>  
+        <!-- shape：按钮形状 -->  
+        <shape android:shape="rectangle">  
+            <!-- solid：背景填充颜色 -->  
+            <solid android:color="@color/blue" />
+            <!-- corners：圆角 -->  
+            <corners android:radius="5dip" />  
+        </shape>  
+    </item>  
+</selector>  
