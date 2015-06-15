@@ -3,21 +3,18 @@ package com.lh.exin;
 import android.app.*;
 import android.content.*;
 import android.os.*;
-import android.support.v4.app.*;
 import android.support.v7.app.*;
 import android.view.*;
 import android.widget.*;
 import android.widget.AdapterView.*;
 import com.lh.exin.activity.*;
+import com.lh.exin.control.*;
 import com.lh.exin.listdata.*;
+import com.lh.exin.routdata.*;
 import com.lh.exin.toolbar.*;
 import com.umeng.analytics.*;
 import com.umeng.update.*;
-
 import android.app.AlertDialog;
-import android.support.v4.app.Fragment;
-import com.lh.exin.control.*;
-import com.lh.exin.routdata.*;
 
 public class MainActivity extends AppCompatActivity implements OnItemClickListener
 {
@@ -66,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
 				break;
 			case 4:
 				i=new Intent();
-				i.setClass(MainActivity.this, About.class);
+				i.setClass(MainActivity.this, AtyAbout.class);
 				startActivity(i);
 				toolbar.closeDrawer();
 				break;

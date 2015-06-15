@@ -11,7 +11,7 @@ import com.lh.exin.routdata.*;
 import com.lh.exin.toolbar.*;
 import com.lh.exin.*;
 
-public class About extends AppCompatActivity
+public class AtyAbout extends AppCompatActivity
 {
 	private ToolbarControl toolbar;
 

@@ -205,7 +205,7 @@ public class Rout
 				System.out.println("当前速度" + trackTime);
 				String[] pppoeInf;
 				pppoeInf = getWanInfo();
-				if (pppoeInf == null || count > 10||pppoeInf.length<14)
+				if (pppoeInf == null || pppoeInf.length<14)
 				{
 					Thread.sleep(trackTime);
 					return;
