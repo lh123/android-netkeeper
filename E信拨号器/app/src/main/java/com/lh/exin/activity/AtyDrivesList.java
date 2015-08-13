@@ -1,66 +1,93 @@
 package com.lh.exin.activity;
-import android.app.*;
 import android.os.*;
-import com.lh.exin.control.*;
-import com.lh.exin.routdata.*;
-import com.lh.exin.*;
-import android.widget.*;
-import com.lh.exin.listdata.*;
-import java.util.*;
-import com.lh.exin.toolbar.*;
+import android.support.v4.widget.*;
 import android.support.v7.app.*;
+import android.widget.*;
+import com.lh.exin.*;
+import com.lh.exin.control.*;
+import com.lh.exin.listdata.*;
+import com.lh.exin.routdata.*;
+import com.lh.exin.toolbar.*;
+import java.util.*;
+import android.view.*;
+import com.nineoldandroids.animation.*;
+import android.view.animation.*;
 
-public class AtyDrivesList extends AppCompatActivity
+public class AtyDrivesList extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener
 {
 	private RoutControl routControl;
-	private ArrayList<DrivesInfo> array;
+	private SwipeRefreshLayout swipelayout;
 	private ListView list;
-	private ProgressDialog pd;
 	private DrivesListAdapter adapter;
+	private LayoutAnimationController lac;
 	private ToolbarControl toolbar;
-	private Handler handler=new Handler(){
-
-		@Override
-		public void handleMessage(Message msg)
-		{
-			switch(msg.what)
-			{
-				case 1:
-					pd=new ProgressDialog(AtyDrivesList.this);
-					pd.setTitle("正在处理");
-					pd.setMessage("正在获取设备列表");
-					pd.show();
-					break;
-				case 2:
-					setAdapter((ArrayList<DrivesInfo>)msg.obj);;
-					pd.cancel();
-					break;
-			}
-		}
-		
-	};
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_driveslist);
+		swipelayout=(SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
+		swipelayout.setColorSchemeResources(R.color.dark_blue);
+		swipelayout.setOnRefreshListener(this);
 		toolbar=new ToolbarControl(this);
 		toolbar.initToolbarNoDrawer("设备列表");
 		routControl=RoutData.routControl;
 		list=(ListView) findViewById(R.id.drivesList);
-		getArray();
-		
+		Animation aa=AnimationUtils.loadAnimation(this,android.R.anim.slide_in_left);
+		//aa.setRepeatMode(Animation.REVERSE);
+		lac=new LayoutAnimationController(aa,0.5f);
+		list.setLayoutAnimation(lac);
+		swipelayout.post(new Runnable(){
+
+				@Override
+				public void run()
+				{
+					swipelayout.setRefreshing(true);
+					onRefresh();
+				}
+			});
 	}
+
+	@Override
+	public void onRefresh()
+	{
+		swipelayout.setRefreshing(true);
+		getArray();
+	}
+	
+	
+	Object[] o;
+	
 	public void getArray()
 	{
-		handler.sendEmptyMessage(1);
 		new Thread(new Runnable(){
 
 				@Override
 				public void run()
 				{
-					array=routControl.getDrivesList();
-					handler.sendMessage(handler.obtainMessage(2,array));
+					o=routControl.getDrivesList();
+					swipelayout.post(new Runnable(){
+
+							@Override
+							public void run()
+							{
+								if((Boolean)o[0]==false)
+								{
+									Toast.makeText(getApplicationContext(),"加载失败",Toast.LENGTH_SHORT).show();
+								}
+								list.startLayoutAnimation();
+								setAdapter((ArrayList<DrivesInfo>)o[1]);
+								if(o[1]==null)
+								{
+									findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
+								}
+								else
+								{
+									findViewById(R.id.empty_view).setVisibility(View.INVISIBLE);
+								}
+								swipelayout.setRefreshing(false);
+							}
+						});
 				}
 			}).start();
 	}

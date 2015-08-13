@@ -22,12 +22,12 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
 	private ToolbarControl toolbar;
 	private RoutControl routControl;
 	private Intent i;
+	Object ob;
     @Override
     public void onCreate(Bundle savedInstanceState)
 	{
         super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		MobclickAgent.updateOnlineConfig(this);
 		listview = (ListView) findViewById(R.id.drawerlistView);
 		listinit();
 		toolbar = new ToolbarControl(this);
@@ -62,6 +62,13 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
 				UmengUpdateAgent.forceUpdate(getApplicationContext());
 				break;
 			case 4:
+				Toast.makeText(MainActivity.this,"功能正在测试",Toast.LENGTH_SHORT).show();
+				i=new Intent();
+				i.setClass(MainActivity.this,AtyCheckProblem.class);
+				startActivity(i);
+				toolbar.closeDrawer();
+				break;
+			case 5:
 				i=new Intent();
 				i.setClass(MainActivity.this, AtyAbout.class);
 				startActivity(i);

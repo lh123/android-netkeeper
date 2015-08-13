@@ -1,7 +1,5 @@
 package com.lh.exin.control;
-import android.app.*;
 import android.content.*;
-import android.os.*;
 import android.widget.*;
 import com.lh.exin.account.*;
 import com.lh.exin.message.*;
@@ -56,18 +54,17 @@ public class RoutControl
 					synchronized (login)
 					{
 						System.out.println("获得lock");
-						login.setTrackTime(1000);
 						long current=System.currentTimeMillis();
 						login.login();
 						MobclickAgent.onEventDuration(context, "登录", System.currentTimeMillis() - current);
 						pauseTrack = false;
 						System.out.println("唤醒track");
-						login.setTrackTime(2500);
 						login.notify();
 					}
 				}
 			}).start();
 	}
+	
 	public void getWanInfo()
 	{
 		readEdittext();
@@ -97,30 +94,16 @@ public class RoutControl
 
 	public void getStatus()
 	{
-		readEdittext();
 		new Thread(new Runnable(){
 
 				@Override
 				public void run()
 				{
-					try
+					synchronized(login)
 					{
-						while (true)
-						{
-							synchronized (login)
-							{
-								while (pauseTrack == true)
-								{
-									System.out.println("停止track");
-									login.wait();
-								}
-								login.startTrack();
-								System.out.println("track_____");
-							}
-						}
+						login.startTrack();
+						login.notifyAll();
 					}
-					catch (InterruptedException e)
-					{}
 				}
 			}).start();
 	}
@@ -147,36 +130,9 @@ public class RoutControl
 			}).start();
 	}
 
-	public ArrayList<DrivesInfo> getDrivesList()
+	public Object[] getDrivesList()
 	{
-		Thread thread=new Thread(new Runnable(){
-
-				@Override
-				public void run()
-				{
-					pauseTrack = true;
-					long current=System.currentTimeMillis();
-					synchronized (login)
-					{
-						array = login.getDrivesList();
-						pauseTrack = false;
-						login.notifyAll();
-						System.out.println("唤醒");
-						MobclickAgent.onEventDuration(context, "获取设备列表", System.currentTimeMillis() - current);
-					}
-				}
-			});
-
-		thread.start();
-		try
-		{
-			thread.join();
-		}
-		catch (InterruptedException e)
-		{
-			return null;
-		}
-		return array;
+		return login.getDrivesList();
 	}
 
 	public void readEdittext()

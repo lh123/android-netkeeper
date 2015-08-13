@@ -19,8 +19,10 @@ public class DrivesListAdapter extends BaseAdapter
 	@Override
 	public int getCount()
 	{
-		
-		return drivesList.size();
+		if(drivesList!=null)
+			return drivesList.size();
+		else
+			return 0;
 	}
 
 	@Override

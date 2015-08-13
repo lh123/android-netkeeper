@@ -11,10 +11,33 @@
 		android:elevation="10dp"
 		layout="@layout/toolbar"/>
 
-	<ListView
+	<RelativeLayout
 		android:layout_height="wrap_content"
-		android:layout_width="match_parent"
-		android:id="@+id/drivesList"/>
+		android:layout_width="wrap_content">
+
+		<TextView
+			android:textColor="#000000"
+			android:text="(空)"
+			android:id="@+id/empty_view"
+			android:layout_centerInParent="true"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceMedium"/>
+		
+		<android.support.v4.widget.SwipeRefreshLayout
+			android:layout_height="match_parent"
+			android:layout_width="match_parent"
+			android:orientation="vertical"
+			android:id="@+id/swipe_refresh">
+
+			<ListView
+				android:layout_height="wrap_content"
+				android:layout_width="match_parent"
+				android:id="@+id/drivesList"/>
+
+		</android.support.v4.widget.SwipeRefreshLayout>
+
+	</RelativeLayout>
 
 </LinearLayout>
 

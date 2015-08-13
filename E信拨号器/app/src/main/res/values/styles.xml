@@ -14,5 +14,4 @@
 	<style name="AppTheme.DrawerArrowToggle" parent="Base.Widget.AppCompat.DrawerArrowToggle">
 		<item name="color">@android:color/white</item>
 	</style>
-	<dimen name="pading_top">0dp</dimen>
 </resources>

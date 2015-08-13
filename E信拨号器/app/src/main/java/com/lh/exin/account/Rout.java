@@ -1,25 +1,26 @@
+
 package com.lh.exin.account;
 
 import android.app.*;
 import android.content.*;
 import android.util.*;
+import android.widget.*;
 import com.lh.exin.message.*;
 import com.lh.exin.routdata.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import android.os.*;
-import android.widget.*;
+import com.umeng.analytics.*;
+import android.net.*;
 
 public class Rout
 {
-	private String realAccount;
+	private String realAccount;//记录真实账户
 	private MessageHandler handle;
 	private TrackHandler thandle;
 	private Context context;
 	private String HTML;
 	private ProgressDialog pd;
-	private long trackTime=2500;
 
 	public static final int CONNECTION_NOT_CONNECTED=0;
 	public static final int CONNECTION_SUCCESS=1;
@@ -47,10 +48,6 @@ public class Rout
 		this.context = context;
 	}
 
-	public void setTrackTime(long trackTime)
-	{
-		this.trackTime = trackTime;
-	}
 
 	public void setHandler(MessageHandler handle, TrackHandler thandle)
 	{
@@ -67,7 +64,7 @@ public class Rout
 		connect.connect();
 		return connect;
 	}
-	public String loginPath(String account, String password)
+	public String loginPath(String account, String password)//获取post路由器的路径
 	{
 		String encodeAccount = null,encodePassWord = null;
 		try
@@ -77,7 +74,7 @@ public class Rout
 		}
 		catch (UnsupportedEncodingException e)
 		{
-
+			MobclickAgent.reportError(context,e);
 		}
 		String path="/userRpm/PPPoECfgRpm.htm?wan=0&wantype=2&acc="
 			+ encodeAccount
@@ -202,12 +199,11 @@ public class Rout
 			int count=0;
 			while (getData)
 			{
-				System.out.println("当前速度" + trackTime);
 				String[] pppoeInf;
 				pppoeInf = getWanInfo();
 				if (pppoeInf == null || pppoeInf.length<14)
 				{
-					Thread.sleep(trackTime);
+					Thread.sleep(1000);
 					return;
 				}
 				switch (Integer.parseInt(pppoeInf[14]))
@@ -221,7 +217,12 @@ public class Rout
 					case CONNECTION_NOT_CONNECTED_WAN:thandle.sendMessage(thandle.obtainMessage(MessageStatus.SET_VIEW_STATUS, PPPoELinkStat[6]));getData = false;break;
 					default:break;
 				}
-				Thread.sleep(trackTime);
+				if(count>10)
+				{
+					thandle.sendMessage(thandle.obtainMessage(MessageStatus.SET_VIEW_STATUS,"连接超时"));
+					return;
+				}
+				Thread.sleep(1000);
 			}
 		}
 		catch (InterruptedException e)
@@ -250,8 +251,11 @@ public class Rout
 		return RoutData.isLogin;
 	}
 	
-	public ArrayList<DrivesInfo> getDrivesList()
+	public Object[] getDrivesList()
 	{
+		ArrayList<DrivesInfo> drivesArray = null;
+		Object[] o=new Object[2];
+		o[0]=true;
 		try
 		{
 			HTML = getRespond(getConnect("http://" + RoutData.rIp + "/userRpm/AssignedIpAddrListRpm.htm"));
@@ -268,7 +272,7 @@ public class Rout
 					String info=HTML.substring(index,indexEnd);
 					info=info.replaceAll("\"","");
 					drivesList=info.split(",");
-					ArrayList<DrivesInfo> drivesArray=new ArrayList<DrivesInfo>();
+					drivesArray=new ArrayList<DrivesInfo>();
 					for(int i=0;i<drivesList.length/4;i++)
 					{
 						drivesInfo=new DrivesInfo();
@@ -278,16 +282,16 @@ public class Rout
 						}
 						drivesInfo.setDrivesInfo(single[0],single[1],single[2],single[3]);
 						drivesArray.add(drivesInfo);
+						o[1]=drivesArray;
 					}
-					return drivesArray;
 				}
 			}
 		}
 		catch (IOException e)
 		{
-			handle.sendEmptyMessage(MessageStatus.CANNOT_CONNECT_ROUT);
+			o[0]=false;
 		}
-		return null;
+		return o;
 	}
 
 	public void showWaitingDialog(String message)
@@ -341,6 +345,19 @@ public class Rout
 			handle.sendEmptyMessage(MessageStatus.CANNOT_CONNECT_ROUT);
 		}
 		handle.sendEmptyMessage(MessageStatus.RESTART_ROUT_SUCCESS);
+	}
+	
+	public void checkProblem()
+	{
+		ConnectivityManager connectivityManager=(ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		if(connectivityManager.getActiveNetworkInfo().getType()==ConnectivityManager.TYPE_WIFI)
+		{
+			
+		}
+		else
+		{
+			
+		}
 	}
 
 	public void showWanInfo(String[] backInfo)

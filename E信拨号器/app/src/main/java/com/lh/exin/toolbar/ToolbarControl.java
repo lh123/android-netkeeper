@@ -27,17 +27,18 @@ public class ToolbarControl
 		toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
 		drawer = (DrawerLayout) activity.findViewById(R.id.drawerlayout);
 		toolbar.setTitle("E信拨号器");
+		setPading();
 		activity.setSupportActionBar(toolbar);
 		activity.getSupportActionBar().setHomeButtonEnabled(true);
 		activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		toggle = new ActionBarDrawerToggle(activity, drawer, toolbar, R.string.open, R.string.close){
 			public void onDrawerOpened(View drawerView)
 			{
-				isOpen=true;
+				isOpen = true;
 			}
 			public void onDrawerClosed(View drawerView)
 			{
-				isOpen=false;
+				isOpen = false;
 			}
 		};
 		toggle.syncState();
@@ -49,6 +50,7 @@ public class ToolbarControl
 	{
 		toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
 		toolbar.setTitle(title);
+		setPading();
 		ViewCompat.setElevation(toolbar, 10);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) 
 		{
@@ -69,12 +71,20 @@ public class ToolbarControl
 				}
 			});
 	}
-	
+
+	public void setPading()
+	{
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+		{
+			DisplayParams params=DisplayParams.getInstance(activity);
+			toolbar.setPadding(0, DisplayUtil.dip2px(24,params.scale), 0, 0);
+		}
+	}
 	public boolean drawerStatus()
 	{
 		return isOpen;
 	}
-	
+
 	public void closeDrawer()
 	{
 		drawer.closeDrawers();

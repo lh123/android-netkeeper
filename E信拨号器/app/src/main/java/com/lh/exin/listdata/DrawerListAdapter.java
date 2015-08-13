@@ -19,7 +19,8 @@ public class DrawerListAdapter extends BaseAdapter
 		array.add(new ItemData(R.drawable.advance,sarray[1]));
 		array.add(new ItemData(R.drawable.list,sarray[2]));
 		array.add(new ItemData(R.drawable.update,sarray[3]));
-		array.add(new ItemData(R.drawable.phone_documents_about_support,sarray[4]));
+		array.add(new ItemData(R.drawable.problem,sarray[4]));
+		array.add(new ItemData(R.drawable.phone_documents_about_support,sarray[5]));
 	}
 	@Override
 	public int getCount()

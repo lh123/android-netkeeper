@@ -5,6 +5,7 @@
 		<item>重启路由器</item>
 		<item>设备列表</item>
 		<item>检查更新</item>
+		<item>故障诊断</item>
 		<item>关于</item>
 	</string-array>
 </resources>
